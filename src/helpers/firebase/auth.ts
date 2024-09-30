@@ -35,7 +35,12 @@ export const signInWithGoogle = () =>
 
 export const signOutUser = () => signOut(auth);
 
-export const getIsUserSignedIn = () => auth.currentUser !== null;
+export const getCurrentUser = () => {
+  if (!auth.currentUser) {
+    throw new Error("No user");
+  }
+  return auth.currentUser;
+};
 
 export const onAuthStateChange = (callback: NextOrObserver<User>) =>
   onAuthStateChanged(auth, callback);

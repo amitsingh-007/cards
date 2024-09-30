@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  getIsUserSignedIn,
   onAuthStateChange,
   signInWithGoogle,
   signOutUser,
@@ -10,7 +9,6 @@ import { User } from "firebase/auth";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const isUserSignedIn = getIsUserSignedIn();
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
