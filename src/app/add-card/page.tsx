@@ -23,16 +23,38 @@ import {
 import { cardBrandList, formSchema } from "./constants";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { saveCard } from "@/helpers/firebase/database";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 type TFormType = z.infer<typeof formSchema>;
 
 const AddCard = () => {
+  const router = useRouter();
   const form = useForm<TFormType>({
     resolver: zodResolver(formSchema),
   });
+  const queryClient = useQueryClient();
+
+  const {
+    mutate: mutateCard,
+    isSuccess,
+    isPending,
+  } = useMutation({
+    mutationFn: saveCard,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["saved-cards"] });
+    },
+  });
+
+  useEffect(() => {
+    if (isSuccess && !isPending) {
+      router.push("/dashboard");
+    }
+  }, [isSuccess]);
 
   const onSubmit = (values: TFormType) => {
-    saveCard(values);
+    mutateCard(values);
   };
 
   return (
@@ -41,7 +63,10 @@ const AddCard = () => {
         Add new card
       </h2>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-4">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-8 mt-4 w-[17rem]"
+        >
           <FormField
             control={form.control}
             name="cardBrand"
@@ -53,7 +78,7 @@ const AddCard = () => {
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
-                    <SelectTrigger className="w-[17rem]">
+                    <SelectTrigger>
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent>
@@ -84,7 +109,6 @@ const AddCard = () => {
                   <Input
                     placeholder="Enter card name"
                     autoComplete="off"
-                    className="w-[17rem]"
                     {...field}
                   />
                 </FormControl>
@@ -102,7 +126,6 @@ const AddCard = () => {
                   <Input
                     placeholder="Enter card name"
                     autoComplete="off"
-                    className="w-[17rem]"
                     type="number"
                     {...field}
                   />
@@ -121,7 +144,6 @@ const AddCard = () => {
                   <Input
                     placeholder="Enter card name"
                     autoComplete="off"
-                    className="w-[17rem]"
                     type="number"
                     {...field}
                   />
@@ -130,7 +152,9 @@ const AddCard = () => {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Button className="w-full" type="submit">
+            Submit
+          </Button>
         </form>
       </Form>
     </div>

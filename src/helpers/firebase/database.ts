@@ -1,4 +1,4 @@
-import { getDatabase, ref, push, set } from "firebase/database";
+import { getDatabase, ref, push, get, child, set } from "firebase/database";
 import { CardDataSchema, TCardData } from "@/types/card";
 import firebaseApp from ".";
 import { getCurrentUser } from "./auth";
@@ -10,6 +10,12 @@ const getUserPath = (path: string) => {
   return `${user.uid}/${path}`;
 };
 
+const fetchData = async <T>(path: string): Promise<T | null> => {
+  const dbRef = ref(database);
+  const snapshot = await get(child(dbRef, getUserPath(path)));
+  return snapshot.exists() ? snapshot.val() : null;
+};
+
 const addToList = async <T extends Record<string, any>>(
   path: string,
   data: T
@@ -19,7 +25,11 @@ const addToList = async <T extends Record<string, any>>(
   await set(newCardRef, data);
 };
 
-export const saveCard = (card: TCardData) => {
+export const getCards = async () => {
+  return fetchData<Record<string, TCardData>>("cards");
+};
+
+export const saveCard = async (card: TCardData) => {
   CardDataSchema.parse(card);
-  addToList("cards", card);
+  await addToList("cards", card);
 };
