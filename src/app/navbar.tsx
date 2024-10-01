@@ -13,6 +13,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
+import ThemeToggle from "./theme-toggle";
+import Link from "next/link";
+import { signInWithGoogle, signOutUser } from "@/helpers/firebase/auth";
 
 const NavBar = () => {
   const { user } = useUser();
@@ -20,8 +23,13 @@ const NavBar = () => {
 
   return (
     <nav className="flex justify-between items-center h-16 shadow-sm px-4">
-      <CardsLogo className="scale-[0.4] origin-left" />
-      <div>
+      <Link href="/">
+        <div className="w-[90px] h-[44px]">
+          <CardsLogo className="scale-[0.4] origin-top-left" />
+        </div>
+      </Link>
+      <div className="flex gap-6 items-center">
+        <ThemeToggle />
         <DropdownMenu>
           <DropdownMenuTrigger>
             <Avatar>
@@ -31,15 +39,30 @@ const NavBar = () => {
               </AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel>{user?.displayName}</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => router.push("/saved-cards")}>
-              Saved cards
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => router.push("/add-card")}>
-              Add card
-            </DropdownMenuItem>
+          <DropdownMenuContent className="w-44">
+            {user ? (
+              <>
+                <DropdownMenuLabel>{user?.displayName}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => router.push("/")}>
+                  Dashboard
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push("/saved-cards")}>
+                  Saved cards
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push("/add-card")}>
+                  Add card
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={signOutUser}>
+                  Log out
+                </DropdownMenuItem>
+              </>
+            ) : (
+              <DropdownMenuItem onClick={signInWithGoogle}>
+                Log in
+              </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

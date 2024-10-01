@@ -49,7 +49,7 @@ const AddCard = () => {
 
   useEffect(() => {
     if (isSuccess && !isPending) {
-      router.push("/dashboard");
+      router.push("/saved-cards");
     }
   }, [isSuccess]);
 
@@ -86,7 +86,9 @@ const AddCard = () => {
                         <SelectItem key={cardBrand.id} value={cardBrand.id}>
                           <div className="flex items-center gap-4">
                             <Avatar className="h-5 w-5">
-                              <AvatarImage src={`/${cardBrand.id}.png`} />
+                              <AvatarImage
+                                src={`/brands/${cardBrand.id}.png`}
+                              />
                             </Avatar>
                             <span>{cardBrand.name}</span>
                           </div>

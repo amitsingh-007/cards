@@ -40,6 +40,9 @@ export const cardBrandList: { id: TCardBrand; name: string }[] = [
   },
 ];
 
+export const getCardBrand = (brandName: string) =>
+  cardBrandList.find((cardBrand) => cardBrand.id === brandName);
+
 export const formSchema = z.object({
   cardBrand: CardBrandEnum,
   cardName: z.string().trim().min(1, "Card name is required"),
