@@ -57,7 +57,7 @@ export const formSchema = z.object({
     if (isNaN(parsed) || parsed < 1 || parsed > 31) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Please enter a valid date",
+        message: "Enter a valid date",
       });
       return z.NEVER;
     }

@@ -47,6 +47,12 @@ const NavBar = () => {
                 <DropdownMenuItem onClick={() => router.push("/")}>
                   Dashboard
                 </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => router.push("/add-transaction")}
+                >
+                  Record a transaction
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => router.push("/saved-cards")}>
                   Saved cards
                 </DropdownMenuItem>
