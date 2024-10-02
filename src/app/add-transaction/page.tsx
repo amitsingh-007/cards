@@ -30,7 +30,7 @@ import {
 } from "@/helpers/firebase/database";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { getCardBrand } from "../add-card/constants";
 import {
   Popover,
@@ -49,9 +49,11 @@ type TFormType = z.infer<typeof formSchema>;
 
 const AddTransaction = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const form = useForm<TFormType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      cardId: searchParams.get("cardId"),
       date: new Date(),
     },
   });

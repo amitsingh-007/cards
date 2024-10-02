@@ -27,6 +27,21 @@ const getUserPath = (path: string) => {
   return `${user.uid}/${path}`;
 };
 
+const checkIfKeyDataExists = async (
+  path: string,
+  key: string,
+  value: string
+) => {
+  const cardTxnQuery = query(
+    ref(database, getUserPath(path)),
+    orderByChild(key),
+    equalTo(value),
+    limitToFirst(1)
+  );
+  const snapshot = await get(cardTxnQuery);
+  return snapshot.exists();
+};
+
 const fetchData = async <T>(path: string): Promise<T | null> => {
   const dbRef = ref(database);
   const snapshot = await get(child(dbRef, getUserPath(path)));
@@ -57,7 +72,7 @@ export const getCardTransactions = async (
 ): Promise<Record<string, TCardTransaction>> => {
   const cardTxnQuery = query(
     ref(database, getUserPath("transactions")),
-    orderByChild("__key"),
+    orderByChild("__shortKey"),
     equalTo(`${year}-${month}`)
   );
   const snapshot = await get(cardTxnQuery);
@@ -71,10 +86,22 @@ export const saveCardTransaction = async (
 
   const date = new Date(cardTransactionData.date);
   const cardTransaction: TCardTransaction = {
-    __key: `${date.getFullYear()}-${date.getMonth()}`,
+    __shortKey: `${date.getFullYear()}-${date.getMonth()}`,
+    __fullKey: `${date.getFullYear()}-${date.getMonth()}-${
+      cardTransactionData.cardId
+    }`,
     cardId: cardTransactionData.cardId,
     amount: cardTransactionData.amount,
     date: date.getTime(),
   };
+
+  const alreadyExists = await checkIfKeyDataExists(
+    "transactions",
+    "__fullKey",
+    `${date.getFullYear()}-${date.getMonth()}-${cardTransactionData.cardId}`
+  );
+  if (alreadyExists) {
+    throw new Error("Transaction already exists");
+  }
   await addToList("transactions", cardTransaction);
 };

@@ -32,7 +32,8 @@ export const CardTransactionFormSchema = z.object({
 export type TCardTransactionForm = z.infer<typeof CardTransactionFormSchema>;
 
 export interface TCardTransaction {
-  __key: string;
+  __shortKey: string;
+  __fullKey: string;
   cardId: string;
   amount: number;
   date: number;
