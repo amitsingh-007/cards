@@ -19,21 +19,10 @@ import { ordinalBillingDate } from "./utils";
 export default function MyCards() {
   const { user } = useUser();
 
-  const { data: cardData } = useQuery({
+  const { data: cardData, isLoading } = useQuery({
     queryKey: ["saved-cards"],
     queryFn: getCards,
   });
-
-  if (!cardData) {
-    return (
-      <div className="flex flex-col gap-4 mt-8">
-        <Skeleton className="h-[125px] w-[250px] rounded-xl" />
-        <Skeleton className="h-[125px] w-[250px] rounded-xl" />
-        <Skeleton className="h-[125px] w-[250px] rounded-xl" />
-        <Skeleton className="h-[125px] w-[250px] rounded-xl" />
-      </div>
-    );
-  }
 
   return (
     <>
@@ -42,52 +31,58 @@ export default function MyCards() {
           Saved cards
         </h2>
         <div className="grid md:grid-cols-2 gap-4 mt-4">
-          {Object.entries(cardData).map(([id, card]) => {
-            const cardBrand = getCardBrand(card.cardBrand);
+          {isLoading
+            ? Array.from({ length: 4 }, (_, index) => (
+                <Card key={index}>
+                  <Skeleton className="rounded-xl border text-card-foreground shadow max-w-md h-[14.875rem]" />
+                </Card>
+              ))
+            : Object.entries(cardData || {}).map(([id, card]) => {
+                const cardBrand = getCardBrand(card.cardBrand);
 
-            return (
-              <Card key={id} className="max-w-md">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Avatar className="h-5 w-5">
-                      <AvatarImage src={`/brands/${cardBrand?.name}.png`} />
-                    </Avatar>
-                    <p>{card.cardName}</p>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="flex items-center justify-between">
-                  <Image
-                    src="/card-chip.png"
-                    width={40}
-                    height={40}
-                    alt="Card chip"
-                  />
-                  <Image
-                    src="/wireless.png"
-                    width={35}
-                    height={35}
-                    alt="Card chip"
-                    className="rotate-90"
-                  />
-                </CardContent>
-                <CardContent className="flex items-center gap-1 tracking-[5px] text-lg font-medium">
-                  <p>**** **** ****</p>
-                  <p>{card.cardLastDigits}</p>
-                </CardContent>
-                <CardFooter className="flex items-center justify-between">
-                  <p className="uppercase text-lg font-semibold tracking-widest">
-                    {user?.displayName}
-                  </p>
-                  <div className="flex gap-1 items-baseline">
-                    <p className="font-medium">
-                      {ordinalBillingDate(card.cardBillingDate)}
-                    </p>
-                    <p className="text-xs">of every month</p>
-                  </div>
-                </CardFooter>
-              </Card>
-            );
-          })}
+                return (
+                  <Card key={id} className="max-w-md">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Avatar className="h-5 w-5">
+                          <AvatarImage src={`/brands/${cardBrand?.id}.png`} />
+                        </Avatar>
+                        <p>{card.cardName}</p>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex items-center justify-between">
+                      <Image
+                        src="/card-chip.png"
+                        width={40}
+                        height={40}
+                        alt="Card chip"
+                      />
+                      <Image
+                        src="/wireless.png"
+                        width={35}
+                        height={35}
+                        alt="Card chip"
+                        className="rotate-90"
+                      />
+                    </CardContent>
+                    <CardContent className="flex items-center gap-1 tracking-[5px] text-lg font-medium">
+                      <p>**** **** ****</p>
+                      <p>{card.cardLastDigits}</p>
+                    </CardContent>
+                    <CardFooter className="flex items-center justify-between">
+                      <p className="uppercase text-lg font-semibold tracking-widest">
+                        {user?.displayName}
+                      </p>
+                      <div className="flex gap-1 items-baseline">
+                        <p className="font-medium">
+                          {ordinalBillingDate(card.cardBillingDate)}
+                        </p>
+                        <p className="text-xs">of every month</p>
+                      </div>
+                    </CardFooter>
+                  </Card>
+                );
+              })}
         </div>
       </div>
     </>
