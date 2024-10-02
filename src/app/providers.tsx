@@ -14,6 +14,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
         defaultTheme="system"
         enableSystem
         disableTransitionOnChange
+        enableColorScheme
       >
         <UserContextProvider>{children}</UserContextProvider>
       </NextThemesProvider>
