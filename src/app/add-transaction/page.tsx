@@ -1,19 +1,22 @@
 "use client";
 
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -21,27 +24,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { formSchema } from "./constants";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import {
-  getCards,
-  saveCard,
-  saveCardTransaction,
-} from "@/helpers/firebase/database";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useMemo } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { getCardBrand } from "../add-card/constants";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { getCards, saveCardTransaction } from "@/helpers/firebase/database";
 import { cn } from "@/lib/utils";
-import { CalendarIcon, IndianRupeeIcon } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
+import { CalendarIcon, IndianRupeeIcon } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { getCardBrand } from "../add-card/constants";
+import { formSchema } from "./constants";
 
 dayjs.extend(advancedFormat);
 
@@ -53,7 +48,7 @@ const AddTransaction = () => {
   const form = useForm<TFormType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      cardId: searchParams.get("cardId"),
+      cardId: searchParams.get("cardId") || undefined,
       date: new Date(),
     },
   });
@@ -78,7 +73,7 @@ const AddTransaction = () => {
     if (isSuccess && !isPending) {
       router.push("/");
     }
-  }, [isSuccess]);
+  }, [isPending, isSuccess, router]);
 
   const onSubmit = (values: TFormType) => {
     mutateCardTransaction(values);
@@ -108,7 +103,7 @@ const AddTransaction = () => {
           <FormField
             control={form.control}
             name="cardId"
-            render={({ field }: any) => (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>Card</FormLabel>
                 <FormControl>
@@ -143,7 +138,7 @@ const AddTransaction = () => {
           <FormField
             control={form.control}
             name="amount"
-            render={({ field }: any) => (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>Amount</FormLabel>
                 <FormControl>
@@ -165,7 +160,7 @@ const AddTransaction = () => {
           <FormField
             control={form.control}
             name="date"
-            render={({ field }: any) => (
+            render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Bill paid on</FormLabel>
                 <Popover>

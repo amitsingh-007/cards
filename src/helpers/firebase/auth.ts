@@ -20,9 +20,7 @@ export const signInWithGoogle = () =>
       if (!credential) {
         throw new Error("No credential");
       }
-      const token = credential.accessToken;
-      const user = result.user;
-      return user;
+      return result.user;
     })
     .catch((error) => {
       const errorCode = error.code;

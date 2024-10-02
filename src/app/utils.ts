@@ -10,7 +10,7 @@ export const getMergedCardsData = (
   const cardTransactionMap = !cardTransactions
     ? new Map<string, TCardTransaction>()
     : Object.entries(cardTransactions).reduce<Map<string, TCardTransaction>>(
-        (map, [transactionId, transaction]) => {
+        (map, [, transaction]) => {
           map.set(transaction.cardId, transaction);
           return map;
         },

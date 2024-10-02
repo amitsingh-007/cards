@@ -51,7 +51,7 @@ const AddCard = () => {
     if (isSuccess && !isPending) {
       router.push("/saved-cards");
     }
-  }, [isSuccess]);
+  }, [isPending, isSuccess, router]);
 
   const onSubmit = (values: TFormType) => {
     mutateCard(values);
@@ -70,7 +70,7 @@ const AddCard = () => {
           <FormField
             control={form.control}
             name="cardBrand"
-            render={({ field }: any) => (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>Card brand</FormLabel>
                 <FormControl>
@@ -104,7 +104,7 @@ const AddCard = () => {
           <FormField
             control={form.control}
             name="cardName"
-            render={({ field }: any) => (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>Card name</FormLabel>
                 <FormControl>
@@ -121,7 +121,7 @@ const AddCard = () => {
           <FormField
             control={form.control}
             name="cardLastDigits"
-            render={({ field }: any) => (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>Last 4 digits</FormLabel>
                 <FormControl>
@@ -139,7 +139,7 @@ const AddCard = () => {
           <FormField
             control={form.control}
             name="cardBillingDate"
-            render={({ field }: any) => (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>Card billing date</FormLabel>
                 <FormControl>

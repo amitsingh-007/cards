@@ -1,21 +1,20 @@
 "use client";
 
-import { Skeleton } from "@/components/ui/skeleton";
-import { getCards } from "@/helpers/firebase/database";
-import { useQuery } from "@tanstack/react-query";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
+import { getCards } from "@/helpers/firebase/database";
+import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import { getCardBrand } from "../add-card/constants";
 import { useUser } from "../contexts/user-context";
 import { ordinalBillingDate } from "./utils";
-import Image from "next/image";
 
 export default function MyCards() {
   const { user } = useUser();
