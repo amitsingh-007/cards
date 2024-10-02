@@ -22,7 +22,6 @@ export const signInWithGoogle = () =>
       }
       const token = credential.accessToken;
       const user = result.user;
-      console.log({ token, user });
       return user;
     })
     .catch((error) => {
