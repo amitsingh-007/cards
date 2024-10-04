@@ -31,8 +31,8 @@ import { useMemo, useState } from "react";
 import { getCardBrand } from "./add-card/constants";
 import { MONTHS, YEARS } from "./constants";
 import { useUser } from "./contexts/user-context";
-import { ordinalBillingDate } from "./saved-cards/utils";
 import { getFormattedPrice, getMergedCardsData } from "./utils";
+import BillingDate from "@/components/common/billing-date";
 
 const currentMonth = new Date().getMonth();
 const currentYear = new Date().getFullYear();
@@ -116,10 +116,7 @@ const DahsboardTable = () => {
                     />
                   </TableCell>
                   <TableCell>
-                    <div className="flex gap-1 items-baseline">
-                      {ordinalBillingDate(cardDetails.cardBillingDate)}
-                      <p className="text-xs hidden sm:block">of every month</p>
-                    </div>
+                    <BillingDate billingDate={cardDetails.cardBillingDate} />
                   </TableCell>
                   <TableCell>
                     {getFormattedPrice(transaction?.amount)}

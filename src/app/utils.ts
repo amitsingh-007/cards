@@ -18,15 +18,19 @@ export const getMergedCardsData = (
         new Map()
       );
 
-  return Object.entries(cardsData).map(([cardId, cardDetails]) => {
-    const transaction = cardTransactionMap.get(cardId);
+  return Object.entries(cardsData)
+    .map(([cardId, cardDetails]) => {
+      const transaction = cardTransactionMap.get(cardId);
 
-    return {
-      cardId: cardId,
-      cardDetails,
-      transaction,
-    };
-  });
+      return {
+        cardId: cardId,
+        cardDetails,
+        transaction,
+      };
+    })
+    .sort(
+      (a, b) => a.cardDetails.cardBillingDate - b.cardDetails.cardBillingDate
+    );
 };
 
 export const getMergedTxnData = (

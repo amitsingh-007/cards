@@ -14,7 +14,8 @@ import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { getCardBrand } from "../add-card/constants";
 import { useUser } from "../contexts/user-context";
-import { ordinalBillingDate } from "./utils";
+import BillingDate from "@/components/common/billing-date";
+import { useMemo } from "react";
 
 export default function MyCards() {
   const { user } = useUser();
@@ -23,6 +24,15 @@ export default function MyCards() {
     queryKey: ["saved-cards"],
     queryFn: getCards,
   });
+
+  const sortedCards = useMemo(() => {
+    if (!cardData) {
+      return [];
+    }
+    return Object.entries(cardData)
+      .map(([cardId, card]) => ({ ...card, cardId }))
+      .sort((a, b) => a.cardName.localeCompare(b.cardName));
+  }, [cardData]);
 
   return (
     <>
@@ -37,20 +47,20 @@ export default function MyCards() {
                   <Skeleton className="rounded-xl border text-card-foreground shadow max-w-md h-[14.875rem]" />
                 </Card>
               ))
-            : Object.entries(cardData || {}).map(([id, card]) => {
-                const cardBrand = getCardBrand(card.cardBrand);
+            : sortedCards.map((cardDetails) => {
+                const cardBrand = getCardBrand(cardDetails.cardBrand);
 
                 return (
-                  <Card key={id} className="max-w-md">
-                    <CardHeader>
+                  <Card key={cardDetails.cardId} className="max-w-md">
+                    <CardHeader className="pb-4">
                       <CardTitle>
                         <CardName
                           cardBrandId={cardBrand?.id}
-                          cardName={card.cardName}
+                          cardName={cardDetails.cardName}
                         />
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="flex items-center justify-between">
+                    <CardContent className="flex items-center justify-between pb-4">
                       <Image
                         src="/card-chip.png"
                         width={40}
@@ -65,20 +75,17 @@ export default function MyCards() {
                         className="rotate-90"
                       />
                     </CardContent>
-                    <CardContent className="flex items-center gap-1 tracking-[5px] text-lg font-medium">
-                      <p>**** **** ****</p>
-                      <p>{card.cardLastDigits}</p>
+                    <CardContent className="flex items-center gap-1 tracking-[5px] text-lg font-medium pb-4">
+                      **** **** **** {cardDetails.cardLastDigits}
                     </CardContent>
                     <CardFooter className="flex items-center justify-between">
                       <p className="uppercase text-lg font-semibold tracking-widest">
                         {user?.displayName}
                       </p>
-                      <div className="flex gap-1 items-baseline">
-                        <p className="font-medium">
-                          {ordinalBillingDate(card.cardBillingDate)}
-                        </p>
-                        <p className="text-xs">of every month</p>
-                      </div>
+                      <BillingDate
+                        billingDate={cardDetails.cardBillingDate}
+                        ordinalClassName="font-medium"
+                      />
                     </CardFooter>
                   </Card>
                 );
