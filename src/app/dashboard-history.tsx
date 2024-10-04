@@ -12,9 +12,9 @@ import dayjs from "dayjs";
 import { useMemo } from "react";
 import { useUser } from "./contexts/user-context";
 import { getFormattedPrice, getMergedTxnData } from "./utils";
+import { ReloadIcon } from "@radix-ui/react-icons";
 
 const DashboardHistory = () => {
-    console.log("DashboardHistory")
   const { user } = useUser();
 
   const { data: cardsData } = useQuery({
@@ -64,7 +64,16 @@ const DashboardHistory = () => {
           </Card>
         )
       )}
-      <Button onClick={() => fetchNextPage()} className="mx-auto">Load more</Button>
+      {hasNextPage && (
+        <Button
+          onClick={() => fetchNextPage()}
+          disabled={isFetching}
+          className="mx-auto"
+        >
+          {isFetching && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
+          Load more
+        </Button>
+      )}
     </div>
   );
 };
