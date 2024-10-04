@@ -9,6 +9,11 @@ import {
   equalTo,
   orderByChild,
   limitToFirst,
+  orderByKey,
+  startAfter,
+  startAt,
+  endBefore,
+  limitToLast,
 } from "firebase/database";
 import {
   CardDataSchema,
@@ -74,6 +79,21 @@ export const getCardTransactions = async (
     ref(database, getUserPath("transactions")),
     orderByChild("__shortKey"),
     equalTo(`${year}-${month}`)
+  );
+  const snapshot = await get(cardTxnQuery);
+  return snapshot.exists() ? snapshot.val() : null;
+};
+
+export const getCardTransactionsInfinite = async ({
+  pageParam,
+}: {
+  pageParam: number;
+}): Promise<Record<string, TCardTransaction> | null> => {
+  const cardTxnQuery = query(
+    ref(database, getUserPath("transactions")),
+    orderByChild("date"),
+    endBefore(pageParam),
+    limitToLast(2)
   );
   const snapshot = await get(cardTxnQuery);
   return snapshot.exists() ? snapshot.val() : null;

@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import CardName from "@/components/common/card-name";
 import {
   Card,
   CardContent,
@@ -43,11 +43,11 @@ export default function MyCards() {
                 return (
                   <Card key={id} className="max-w-md">
                     <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <Avatar className="h-5 w-5">
-                          <AvatarImage src={`/brands/${cardBrand?.id}.png`} />
-                        </Avatar>
-                        <p>{card.cardName}</p>
+                      <CardTitle>
+                        <CardName
+                          cardBrandId={cardBrand?.id}
+                          cardName={card.cardName}
+                        />
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="flex items-center justify-between">

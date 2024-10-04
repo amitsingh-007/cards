@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import CardName from "@/components/common/card-name";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -118,14 +118,11 @@ const AddTransaction = () => {
                     <SelectContent>
                       {cardOptions.map((cardOptions) => (
                         <SelectItem key={cardOptions.id} value={cardOptions.id}>
-                          <div className="flex items-center gap-4">
-                            <Avatar className="h-5 w-5">
-                              <AvatarImage
-                                src={`/brands/${cardOptions.cardBrand?.id}.png`}
-                              />
-                            </Avatar>
-                            <span>{cardOptions.name}</span>
-                          </div>
+                          <CardName
+                            cardBrandId={cardOptions.cardBrand?.id}
+                            cardName={cardOptions.name}
+                            className="gap-4"
+                          />
                         </SelectItem>
                       ))}
                     </SelectContent>

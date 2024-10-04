@@ -1,4 +1,5 @@
 import { TCardData, TCardTransaction } from "@/types/card";
+import { InfiniteData } from "@tanstack/react-query";
 
 export const getMergedCardsData = (
   cardsData: Record<string, TCardData> | undefined | null,
@@ -27,3 +28,34 @@ export const getMergedCardsData = (
     };
   });
 };
+
+export const getMergedTxnData = (
+  cardsData: Record<string, TCardData> | undefined | null,
+  cardTransactions:
+    | InfiniteData<Record<string, TCardTransaction> | null>
+    | undefined
+) => {
+  if (!cardsData || !cardTransactions) {
+    return [];
+  }
+
+  return cardTransactions.pages
+    .map((page) => {
+      return Object.entries(page || {}).map(([transactionId, transaction]) => {
+        return {
+          transactionId,
+          cardDetails: cardsData[transaction.cardId],
+          transaction,
+        };
+      });
+    })
+    .flatMap((x) => x);
+};
+
+export const getFormattedPrice = (price: number | undefined) =>
+  price
+    ? `${new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "INR",
+      }).format(price)}`
+    : "-";

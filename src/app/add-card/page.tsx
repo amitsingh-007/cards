@@ -1,8 +1,7 @@
 "use client";
 
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import CardName from "@/components/common/card-name";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -12,7 +11,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -20,12 +18,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { cardBrandList, formSchema } from "./constants";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { saveCard } from "@/helpers/firebase/database";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { cardBrandList, formSchema } from "./constants";
 
 type TFormType = z.infer<typeof formSchema>;
 
@@ -84,14 +84,11 @@ const AddCard = () => {
                     <SelectContent>
                       {cardBrandList.map((cardBrand) => (
                         <SelectItem key={cardBrand.id} value={cardBrand.id}>
-                          <div className="flex items-center gap-4">
-                            <Avatar className="h-5 w-5">
-                              <AvatarImage
-                                src={`/brands/${cardBrand.id}.png`}
-                              />
-                            </Avatar>
-                            <span>{cardBrand.name}</span>
-                          </div>
+                          <CardName
+                            cardBrandId={cardBrand.id}
+                            cardName={cardBrand.name}
+                            className="gap-4"
+                          />
                         </SelectItem>
                       ))}
                     </SelectContent>
