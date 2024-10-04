@@ -24,12 +24,9 @@ const DashboardHistory = () => {
   });
   const {
     data: allTransactionsData,
-    error,
     fetchNextPage,
     hasNextPage,
     isFetching,
-    isFetchingNextPage,
-    status,
   } = useInfiniteQuery({
     queryKey: ["all-transactions"],
     queryFn: getCardTransactionsInfinite,
