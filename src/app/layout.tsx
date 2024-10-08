@@ -3,6 +3,7 @@ import "./globals.css";
 import { Poppins } from "next/font/google";
 import NavBar from "./navbar";
 import Providers from "./providers";
+import { Toaster } from "@/components/ui/sonner";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
@@ -32,6 +33,7 @@ export default function RootLayout({
         <Providers>
           <NavBar />
           <main className="container">{children}</main>
+          <Toaster />
         </Providers>
       </body>
     </html>

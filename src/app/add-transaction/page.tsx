@@ -37,6 +37,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { getCardBrand } from "../add-card/constants";
 import { formSchema } from "./constants";
+import { toast } from "sonner";
 
 dayjs.extend(advancedFormat);
 
@@ -71,6 +72,7 @@ const AddTransaction = () => {
 
   useEffect(() => {
     if (isSuccess && !isPending) {
+      toast("Transaction added successfully");
       router.push("/");
     }
   }, [isPending, isSuccess, router]);

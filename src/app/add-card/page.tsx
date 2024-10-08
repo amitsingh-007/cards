@@ -26,6 +26,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { cardBrandList, formSchema } from "./constants";
+import { toast } from "sonner";
 
 type TFormType = z.infer<typeof formSchema>;
 
@@ -49,6 +50,7 @@ const AddCard = () => {
 
   useEffect(() => {
     if (isSuccess && !isPending) {
+      toast("Card saved successfully");
       router.push("/saved-cards");
     }
   }, [isPending, isSuccess, router]);

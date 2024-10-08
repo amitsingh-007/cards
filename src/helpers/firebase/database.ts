@@ -21,6 +21,7 @@ import {
 } from "firebase/database";
 import firebaseApp from ".";
 import { getCurrentUser } from "./auth";
+import { toast } from "sonner";
 
 const database = getDatabase(firebaseApp);
 
@@ -118,7 +119,8 @@ export const saveCardTransaction = async (
     `${date.getFullYear()}-${date.getMonth()}-${cardTransactionData.cardId}`
   );
   if (alreadyExists) {
-    throw new Error("Transaction already exists");
+    toast("Transaction already exists");
+  } else {
+    await addToList("transactions", cardTransaction);
   }
-  await addToList("transactions", cardTransaction);
 };
