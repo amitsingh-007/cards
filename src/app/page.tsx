@@ -4,15 +4,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useUser } from "./contexts/user-context";
 import DashboardHistory from "./dashboard-history";
 import DahsboardTable from "./dashboard-table";
-import { trpc } from "@/trpc-client/api";
+import { CustomSpinner } from "@/components/ui/custom-spinner";
 
 export default function Home() {
   const { user } = useUser();
 
-  const { data: hello } = trpc.extension.hello.useQuery();
-
   if (!user) {
-    return null;
+    return <CustomSpinner className="w-14 h-14 mx-auto mt-22" />;
   }
 
   return (
