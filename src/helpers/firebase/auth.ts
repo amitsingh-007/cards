@@ -6,6 +6,7 @@ import {
   signInWithPopup,
   signOut,
   User,
+  getIdToken,
 } from "firebase/auth";
 import firebaseApp from ".";
 
@@ -41,3 +42,10 @@ export const getCurrentUser = () => {
 
 export const onAuthStateChange = (callback: NextOrObserver<User>) =>
   onAuthStateChanged(auth, callback);
+
+export const getClientIdToken = async () => {
+  if (!auth.currentUser) {
+    return null;
+  }
+  return getIdToken(auth.currentUser, true);
+};
