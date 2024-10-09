@@ -1,7 +1,8 @@
 import { getClientIdToken } from "@/helpers/firebase/auth";
-import { AppRouter } from "@/server/api/routers/root";
+import type { AppRouter } from "@/server/api/routers/root";
 import env from "@/server/env.mjs";
-import { createTRPCProxyClient, httpBatchLink, loggerLink } from "@trpc/client";
+import { httpBatchLink, loggerLink } from "@trpc/client";
+import { createTRPCReact } from "@trpc/react-query";
 
 const getBaseUrl = () => {
   if (typeof window !== "undefined") {
@@ -10,7 +11,9 @@ const getBaseUrl = () => {
   return env.VERCEL_URL;
 };
 
-export const api = createTRPCProxyClient<AppRouter>({
+export const trpc = createTRPCReact<AppRouter>();
+
+export const trpcClient = trpc.createClient({
   links: [
     loggerLink({
       enabled: (opts) => {
