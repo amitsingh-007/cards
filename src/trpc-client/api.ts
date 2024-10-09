@@ -25,9 +25,12 @@ export const trpcClient = trpc.createClient({
     }),
     httpBatchLink({
       url: `${getBaseUrl()}/api/trpc`,
-      headers: async () => ({
-        authorization: `Bearer ${await getClientIdToken()}`,
-      }),
+      headers: async () => {
+        const idToken = await getClientIdToken();
+        return {
+          authorization: idToken ? `Bearer ${idToken}` : undefined,
+        };
+      },
     }),
   ],
 });

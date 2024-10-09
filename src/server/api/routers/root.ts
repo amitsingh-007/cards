@@ -1,7 +1,8 @@
+import { protectedProcedure, publicProcedure } from "../procedures";
 import { t } from "../trpc";
 
 const extensionRouter = t.router({
-  hello: t.procedure.query(() => {
+  hello: protectedProcedure.query(() => {
     return {
       text: "Hello World!",
     };
