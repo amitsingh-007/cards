@@ -60,26 +60,9 @@ const addToList = async <T extends Record<string, any>>(
   await set(newCardRef, data);
 };
 
-export const getCards = async () => {
-  return fetchData<Record<string, TCardData>>("cards");
-};
-
 export const saveCard = async (card: TCardData) => {
   CardDataSchema.parse(card);
   await addToList("cards", card);
-};
-
-export const getCardTransactions = async (
-  month: number,
-  year: number
-): Promise<Record<string, TCardTransaction>> => {
-  const cardTxnQuery = query(
-    ref(database, getUserPath("transactions")),
-    orderByChild("__shortKey"),
-    equalTo(`${year}-${month}`)
-  );
-  const snapshot = await get(cardTxnQuery);
-  return snapshot.exists() ? snapshot.val() : null;
 };
 
 export const getCardTransactionsInfinite = async ({

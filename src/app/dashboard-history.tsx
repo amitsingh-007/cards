@@ -3,25 +3,16 @@
 import CardName from "@/components/common/card-name";
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
-import {
-  getCards,
-  getCardTransactionsInfinite,
-} from "@/helpers/firebase/database";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { getCardTransactionsInfinite } from "@/helpers/firebase/database";
+import { trpc } from "@/trpc-client/api";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { useMemo } from "react";
-import { useUser } from "./contexts/user-context";
 import { getFormattedPrice, getMergedTxnData } from "./utils";
-import { ReloadIcon } from "@radix-ui/react-icons";
 
 const DashboardHistory = () => {
-  const { user } = useUser();
-
-  const { data: cardsData } = useQuery({
-    queryKey: ["saved-cards"],
-    queryFn: getCards,
-    enabled: !!user,
-  });
+  const { data: cardsData } = trpc.card.getAll.useQuery();
   const {
     data: allTransactionsData,
     fetchNextPage,

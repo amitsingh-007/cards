@@ -1,5 +1,6 @@
 "use client";
 
+import BillingDate from "@/components/common/billing-date";
 import CardName from "@/components/common/card-name";
 import {
   Card,
@@ -9,21 +10,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getCards } from "@/helpers/firebase/database";
-import { useQuery } from "@tanstack/react-query";
+import { trpc } from "@/trpc-client/api";
 import Image from "next/image";
+import { useMemo } from "react";
 import { getCardBrand } from "../add-card/constants";
 import { useUser } from "../contexts/user-context";
-import BillingDate from "@/components/common/billing-date";
-import { useMemo } from "react";
 
 export default function MyCards() {
   const { user } = useUser();
 
-  const { data: cardData, isLoading } = useQuery({
-    queryKey: ["saved-cards"],
-    queryFn: getCards,
-  });
+  const { data: cardData } = trpc.card.getAll.useQuery();
 
   const sortedCards = useMemo(() => {
     if (!cardData) {

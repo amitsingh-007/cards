@@ -23,8 +23,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getCards, getCardTransactions } from "@/helpers/firebase/database";
-import { useQuery } from "@tanstack/react-query";
 import { MoreHorizontal } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -44,14 +42,11 @@ const DahsboardTable = () => {
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
   const [selectedYear, setSelectedYear] = useState(currentYear);
 
-  const { data: cardsData } = trpc.card.getAll.useQuery(undefined, {
-    enabled: !!user,
-  });
-  const { data: cardTransactions } = useQuery({
-    queryKey: ["card-transactions", selectedMonth, selectedYear],
-    queryFn: () => getCardTransactions(selectedMonth, selectedYear),
-    enabled: !!user,
-  });
+  const { data: cardsData } = trpc.card.getAll.useQuery();
+  const { data: cardTransactions } = trpc.transaction.getByMonthYear.useQuery(
+    { month: selectedMonth, year: selectedYear },
+    { enabled: !!user }
+  );
 
   const monthCardsData = useMemo(
     () => getMergedCardsData(cardsData, cardTransactions),

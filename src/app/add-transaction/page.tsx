@@ -24,20 +24,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { getCards, saveCardTransaction } from "@/helpers/firebase/database";
+import { saveCardTransaction } from "@/helpers/firebase/database";
 import { cn } from "@/lib/utils";
+import { trpc } from "@/trpc-client/api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import { CalendarIcon, IndianRupeeIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import { getCardBrand } from "../add-card/constants";
 import { formSchema } from "./constants";
-import { toast } from "sonner";
 
 dayjs.extend(advancedFormat);
 
@@ -55,10 +56,7 @@ const AddTransaction = () => {
   });
   const queryClient = useQueryClient();
 
-  const { data: cardData } = useQuery({
-    queryKey: ["saved-cards"],
-    queryFn: getCards,
-  });
+  const { data: cardData } = trpc.card.getAll.useQuery();
   const {
     mutate: mutateCardTransaction,
     isSuccess,

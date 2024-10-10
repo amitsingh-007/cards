@@ -2,7 +2,7 @@ import { TCardData, TCardTransaction } from "@/types/card";
 import { InfiniteData } from "@tanstack/react-query";
 
 export const getMergedCardsData = (
-  cardsData: Record<string, TCardData> | undefined | null,
+  cardsData: Record<string, TCardData> | undefined,
   cardTransactions: Record<string, TCardTransaction> | undefined
 ) => {
   if (!cardsData) {

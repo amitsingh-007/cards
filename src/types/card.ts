@@ -33,10 +33,17 @@ export const CardTransactionFormSchema = z.object({
 
 export type TCardTransactionForm = z.infer<typeof CardTransactionFormSchema>;
 
-export interface TCardTransaction {
-  __shortKey: string;
-  __fullKey: string;
-  cardId: string;
-  amount: number;
-  date: number;
-}
+export const CardTransactionSchema = z.object({
+  __shortKey: z.string(),
+  __fullKey: z.string(),
+  cardId: z.string(),
+  amount: z.number(),
+  date: z.number(),
+});
+
+export type TCardTransaction = z.infer<typeof CardTransactionSchema>;
+
+export const CardTransactionRecordSchema = z.record(
+  z.string(),
+  CardTransactionSchema
+);
