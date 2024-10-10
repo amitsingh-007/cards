@@ -1,5 +1,5 @@
 import { getClientIdToken } from "@/helpers/firebase/auth";
-import type { AppRouter } from "@/server/api/routers/root";
+import type { AppRouter } from "@/server/routers/root-router";
 import env from "@/server/env.mjs";
 import { httpBatchLink, loggerLink } from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";

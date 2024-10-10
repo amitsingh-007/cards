@@ -33,6 +33,7 @@ import { MONTHS, YEARS } from "./constants";
 import { useUser } from "./contexts/user-context";
 import { getFormattedPrice, getMergedCardsData } from "./utils";
 import BillingDate from "@/components/common/billing-date";
+import { trpc } from "@/trpc-client/api";
 
 const currentMonth = new Date().getMonth();
 const currentYear = new Date().getFullYear();
@@ -43,9 +44,7 @@ const DahsboardTable = () => {
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
   const [selectedYear, setSelectedYear] = useState(currentYear);
 
-  const { data: cardsData } = useQuery({
-    queryKey: ["saved-cards"],
-    queryFn: getCards,
+  const { data: cardsData } = trpc.card.getAll.useQuery(undefined, {
     enabled: !!user,
   });
   const { data: cardTransactions } = useQuery({

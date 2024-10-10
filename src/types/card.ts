@@ -23,6 +23,8 @@ export const CardDataSchema = z.object({
 
 export type TCardData = z.infer<typeof CardDataSchema>;
 
+export const CardDataRecordSchema = z.record(z.string(), CardDataSchema);
+
 export const CardTransactionFormSchema = z.object({
   cardId: z.string(),
   amount: z.number(),

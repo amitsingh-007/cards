@@ -20,4 +20,8 @@ const getFirebaseCredentials = () => {
 export const firebaseAdmin =
   getApps().length > 0
     ? getApp()
-    : initializeApp({ credential: getFirebaseCredentials() });
+    : initializeApp({
+        credential: getFirebaseCredentials(),
+        databaseURL: env.FIREBASE_DATABASE_URL,
+        storageBucket: env.FIREBASE_STORAGE_BUCKET,
+      });
