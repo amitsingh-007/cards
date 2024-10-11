@@ -1,5 +1,5 @@
-import env from "../env.mjs";
-import { cert, getApps, getApp, initializeApp } from "firebase-admin/app";
+import env from '../env.mjs';
+import { cert, getApps, getApp, initializeApp } from 'firebase-admin/app';
 
 /**
  * We split the credentials json that we get from firebase admin because:
@@ -10,6 +10,12 @@ import { cert, getApps, getApp, initializeApp } from "firebase-admin/app";
  */
 const getFirebaseCredentials = () => {
   const serviceAccountKey = JSON.parse(env.FIREBASE_SERVICE_ACCOUNT);
+
+  console.log('FIREBASE_PRIVATE_KEY', {
+    env: env.FIREBASE_PRIVATE_KEY,
+  });
+
+  console.log('SERVICE_ACCOUNT_KEY', serviceAccountKey);
 
   return cert({
     ...serviceAccountKey,
