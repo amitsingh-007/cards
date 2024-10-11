@@ -7,20 +7,23 @@ const database = getDatabase(firebaseAdmin);
 
 const getUserPath = (path: string, user: UserRecord) => `${user.uid}/${path}`;
 
-export const fetch = async ({
-  relPath,
-  user,
-  orderByChild,
-  equalTo,
-}: TFetch): Promise<unknown> => {
+export const fetch = async ({ relPath, user, ...filters }: TFetch) => {
   const dbPath = getUserPath(relPath, user);
+
   let query: Query = database.ref(dbPath);
-  if (orderByChild) {
-    query = query.orderByChild(orderByChild);
+  if (filters.orderByChild) {
+    query = query.orderByChild(filters.orderByChild);
   }
-  if (equalTo) {
-    query = query.equalTo(equalTo);
+  if (filters.equalTo) {
+    query = query.equalTo(filters.equalTo);
   }
+  if (filters.endBefore) {
+    query = query.endBefore(filters.endBefore);
+  }
+  if (filters.limitToLast) {
+    query = query.limitToLast(filters.limitToLast);
+  }
+
   const snapshot = await query.once("value");
   return snapshot.exists() ? snapshot.val() : {};
 };

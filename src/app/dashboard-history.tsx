@@ -3,10 +3,8 @@
 import CardName from "@/components/common/card-name";
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
-import { getCardTransactionsInfinite } from "@/helpers/firebase/database";
 import { trpc } from "@/trpc-client/api";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { useInfiniteQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { useMemo } from "react";
 import { getFormattedPrice, getMergedTxnData } from "./utils";
@@ -18,16 +16,19 @@ const DashboardHistory = () => {
     fetchNextPage,
     hasNextPage,
     isFetching,
-  } = useInfiniteQuery({
-    queryKey: ["all-transactions"],
-    queryFn: getCardTransactionsInfinite,
-    initialPageParam: Date.now(),
-    getNextPageParam: (lastPage) => {
-      if (!lastPage) return undefined;
-      const transactions = Object.values(lastPage);
-      return transactions[transactions.length - 1].date;
-    },
-  });
+  } = trpc.transaction.getByPagination.useInfiniteQuery(
+    {},
+    {
+      initialCursor: Date.now(),
+      getNextPageParam: (lastPage) => {
+        if (!lastPage) return undefined;
+        const transactions = Object.values(lastPage).sort(
+          (a, b) => b.date - a.date
+        );
+        return transactions.at(-1)?.date;
+      },
+    }
+  );
 
   const recentTransactionsData = useMemo(
     () => getMergedTxnData(cardsData, allTransactionsData),

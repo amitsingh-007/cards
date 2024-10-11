@@ -34,9 +34,9 @@ export const getMergedCardsData = (
 };
 
 export const getMergedTxnData = (
-  cardsData: Record<string, TCardData> | undefined | null,
+  cardsData: Record<string, TCardData> | undefined,
   cardTransactions:
-    | InfiniteData<Record<string, TCardTransaction> | null>
+    | InfiniteData<Record<string, TCardTransaction> | undefined>
     | undefined
 ) => {
   if (!cardsData || !cardTransactions) {
@@ -44,7 +44,7 @@ export const getMergedTxnData = (
   }
 
   return cardTransactions.pages
-    .map((page) => {
+    .flatMap((page) => {
       return Object.entries(page || {}).map(([transactionId, transaction]) => {
         return {
           transactionId,
@@ -53,7 +53,7 @@ export const getMergedTxnData = (
         };
       });
     })
-    .flatMap((x) => x);
+    .sort((a, b) => b.transaction.date - a.transaction.date);
 };
 
 export const getFormattedPrice = (price: number | undefined) =>

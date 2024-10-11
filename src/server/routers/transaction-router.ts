@@ -2,7 +2,10 @@ import { CardTransactionRecordSchema } from "@/types/card";
 import { z } from "zod";
 import { protectedProcedure } from "./procedures";
 import { t } from "./trpc";
-import { getTransactionsByMonthYear } from "../services/transaction-service";
+import {
+  getPaginatedTransactions,
+  getTransactionsByMonthYear,
+} from "../services/transaction-service";
 
 const transactionRouter = t.router({
   getByMonthYear: protectedProcedure
@@ -10,6 +13,13 @@ const transactionRouter = t.router({
     .output(CardTransactionRecordSchema)
     .query(async ({ ctx, input }) =>
       getTransactionsByMonthYear(ctx.user, input.month, input.year)
+    ),
+
+  getByPagination: protectedProcedure
+    .input(z.object({ cursor: z.number() }))
+    .output(CardTransactionRecordSchema.optional())
+    .query(async ({ ctx, input }) =>
+      getPaginatedTransactions(ctx.user, input.cursor)
     ),
 });
 

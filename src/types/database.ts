@@ -20,4 +20,6 @@ export type TFetch = {
   relPath: string;
   user: UserRecord;
   equalTo?: string;
+  endBefore?: number;
+  limitToLast?: number;
 } & (TFetchCard | TFetchTransaction);

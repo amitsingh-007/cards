@@ -6,22 +6,19 @@ import {
   TCardTransactionForm,
 } from "@/types/card";
 import {
-  child,
-  endBefore,
   equalTo,
   get,
   getDatabase,
   limitToFirst,
-  limitToLast,
   orderByChild,
   push,
   query,
   ref,
   set,
 } from "firebase/database";
+import { toast } from "sonner";
 import firebaseApp from ".";
 import { getCurrentUser } from "./auth";
-import { toast } from "sonner";
 
 const database = getDatabase(firebaseApp);
 
@@ -45,12 +42,6 @@ const checkIfKeyDataExists = async (
   return snapshot.exists();
 };
 
-const fetchData = async <T>(path: string): Promise<T | null> => {
-  const dbRef = ref(database);
-  const snapshot = await get(child(dbRef, getUserPath(path)));
-  return snapshot.exists() ? snapshot.val() : null;
-};
-
 const addToList = async <T extends Record<string, any>>(
   path: string,
   data: T
@@ -63,21 +54,6 @@ const addToList = async <T extends Record<string, any>>(
 export const saveCard = async (card: TCardData) => {
   CardDataSchema.parse(card);
   await addToList("cards", card);
-};
-
-export const getCardTransactionsInfinite = async ({
-  pageParam,
-}: {
-  pageParam: number;
-}): Promise<Record<string, TCardTransaction> | null> => {
-  const cardTxnQuery = query(
-    ref(database, getUserPath("transactions")),
-    orderByChild("date"),
-    endBefore(pageParam),
-    limitToLast(2)
-  );
-  const snapshot = await get(cardTxnQuery);
-  return snapshot.exists() ? snapshot.val() : null;
 };
 
 export const saveCardTransaction = async (
