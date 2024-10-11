@@ -1,9 +1,10 @@
+import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
-import "./globals.css";
 import { Poppins } from "next/font/google";
+import AuthLayout from "./auth-layout";
+import "./globals.css";
 import NavBar from "./navbar";
 import Providers from "./providers";
-import { Toaster } from "@/components/ui/sonner";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
@@ -32,7 +33,9 @@ export default function RootLayout({
       <body className={`${poppins.className} antialiased`}>
         <Providers>
           <NavBar />
-          <main className="container">{children}</main>
+          <main className="container">
+            <AuthLayout>{children}</AuthLayout>
+          </main>
           <Toaster />
         </Providers>
       </body>

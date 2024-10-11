@@ -1,6 +1,5 @@
 "use client";
 
-import CardsLogo from "@/components/icons/cards-logo";
 import { useUser } from "./contexts/user-context";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UserRound } from "lucide-react";
@@ -16,6 +15,11 @@ import { useRouter } from "next/navigation";
 import ThemeToggle from "./theme-toggle";
 import Link from "next/link";
 import { signInWithGoogle, signOutUser } from "@/helpers/firebase/auth";
+import dynamic from "next/dynamic";
+
+const CardsLogo = dynamic(() => import("@/components/icons/cards-logo"), {
+  ssr: false,
+});
 
 const NavBar = () => {
   const { user } = useUser();
