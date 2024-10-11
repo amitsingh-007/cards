@@ -8,7 +8,6 @@
     "start": "pnpm build && next start",
     "lint": "next lint",
     "deploy:preview": "vercel",
-    "deploy": "vercel --prod",
     "env": "vercel env pull .env"
   },
   "dependencies": {
