@@ -1,0 +1,13 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base",
+    ":disableRateLimiting",
+    ":rebaseStalePrs",
+    ":updateNotScheduled",
+    ":automergeMinor",
+    ":maintainLockFilesMonthly",
+    "schedule:monthly"
+  ],
+  "baseBranches": ["renovate-updates"]
+}

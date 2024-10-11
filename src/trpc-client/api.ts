@@ -1,12 +1,12 @@
-import { getClientIdToken } from "@/helpers/firebase/auth";
-import type { AppRouter } from "@/server/routers/root-router";
-import env from "@/server/env.mjs";
-import { httpBatchLink, loggerLink } from "@trpc/client";
-import { createTRPCReact } from "@trpc/react-query";
+import { getClientIdToken } from '@/helpers/firebase/auth';
+import type { AppRouter } from '@/server/routers/root-router';
+import env from '@/server/env.mjs';
+import { httpBatchLink, loggerLink } from '@trpc/client';
+import { createTRPCReact } from '@trpc/react-query';
 
 const getBaseUrl = () => {
-  if (typeof window !== "undefined") {
-    return "";
+  if (typeof window !== 'undefined') {
+    return '';
   }
   return env.VERCEL_URL;
 };
@@ -17,10 +17,10 @@ export const trpcClient = trpc.createClient({
   links: [
     loggerLink({
       enabled: (opts) => {
-        if (env.NEXT_PUBLIC_VERCEL_ENV === "development") {
+        if (env.NEXT_PUBLIC_VERCEL_ENV === 'development') {
           return true;
         }
-        return opts.direction === "down" && opts.result instanceof Error;
+        return opts.direction === 'down' && opts.result instanceof Error;
       },
     }),
     httpBatchLink({

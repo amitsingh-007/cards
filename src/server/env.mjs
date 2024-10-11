@@ -1,16 +1,16 @@
-import { createEnv } from "@t3-oss/env-nextjs";
-import { z } from "zod";
+import { createEnv } from '@t3-oss/env-nextjs';
+import { z } from 'zod';
 
 const env = createEnv({
   server: {
-    VERCEL_URL: z.string().url(),
+    VERCEL_URL: z.string().optional(),
     FIREBASE_SERVICE_ACCOUNT: z.string(),
     FIREBASE_PRIVATE_KEY: z.string(),
     FIREBASE_DATABASE_URL: z.string(),
     FIREBASE_STORAGE_BUCKET: z.string(),
   },
   client: {
-    NEXT_PUBLIC_VERCEL_ENV: z.enum(["development", "production"]),
+    NEXT_PUBLIC_VERCEL_ENV: z.enum(['development', 'production']),
   },
   experimental__runtimeEnv: {
     NEXT_PUBLIC_VERCEL_ENV: process.env.NEXT_PUBLIC_VERCEL_ENV,
