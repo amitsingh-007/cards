@@ -14,12 +14,13 @@ export const getTransactionsByMonthYear = async (
   month: number,
   year: number
 ) => {
-  return fetch({
+  const transactions = await fetch({
     relPath: DB_PATHS.TRANSACTIONS,
     user,
     orderByChild: "__shortKey",
     equalTo: getShortKey(month, year),
   });
+  return transactions ?? {};
 };
 
 export const getPaginatedTransactions = async (
