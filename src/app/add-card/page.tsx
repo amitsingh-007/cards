@@ -18,15 +18,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { saveCard } from "@/helpers/firebase/database";
+import { trpc } from "@/trpc-client/api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import { cardBrandList, formSchema } from "./constants";
-import { toast } from "sonner";
+import { ReloadIcon } from "@radix-ui/react-icons";
 
 type TFormType = z.infer<typeof formSchema>;
 
@@ -35,28 +35,27 @@ const AddCard = () => {
   const form = useForm<TFormType>({
     resolver: zodResolver(formSchema),
   });
-  const queryClient = useQueryClient();
 
+  const trpcUtils = trpc.useUtils();
   const {
-    mutate: mutateCard,
+    mutate: addCard,
     isSuccess,
-    isPending,
-  } = useMutation({
-    mutationFn: saveCard,
+    isLoading,
+  } = trpc.card.add.useMutation({
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["saved-cards"] });
+      trpcUtils.card.getAll.invalidate();
     },
   });
 
   useEffect(() => {
-    if (isSuccess && !isPending) {
+    if (isSuccess && !isLoading) {
       toast("Card saved successfully");
       router.push("/saved-cards");
     }
-  }, [isPending, isSuccess, router]);
+  }, [isLoading, isSuccess, router]);
 
   const onSubmit = (values: TFormType) => {
-    mutateCard(values);
+    addCard(values);
   };
 
   return (
@@ -153,7 +152,8 @@ const AddCard = () => {
               </FormItem>
             )}
           />
-          <Button className="w-full" type="submit">
+          <Button className="w-full" type="submit" disabled={isLoading}>
+            {isLoading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
             Submit
           </Button>
         </form>

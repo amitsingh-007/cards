@@ -1,10 +1,14 @@
-import { CardTransactionRecordSchema } from "@/types/card";
+import {
+  CardTransactionFormSchema,
+  CardTransactionRecordSchema,
+} from "@/types/card";
 import { z } from "zod";
 import { protectedProcedure } from "./procedures";
 import { t } from "./trpc";
 import {
   getPaginatedTransactions,
   getTransactionsByMonthYear,
+  saveTransaction,
 } from "../services/transaction-service";
 
 const transactionRouter = t.router({
@@ -21,6 +25,10 @@ const transactionRouter = t.router({
     .query(async ({ ctx, input }) =>
       getPaginatedTransactions(ctx.user, input.cursor)
     ),
+
+  add: protectedProcedure
+    .input(CardTransactionFormSchema)
+    .mutation(async ({ ctx, input }) => saveTransaction(ctx.user, input)),
 });
 
 export default transactionRouter;

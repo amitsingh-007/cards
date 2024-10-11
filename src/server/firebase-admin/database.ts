@@ -20,10 +20,22 @@ export const fetch = async ({ relPath, user, ...filters }: TFetch) => {
   if (filters.endBefore) {
     query = query.endBefore(filters.endBefore);
   }
+  if (filters.limitToFirst) {
+    query = query.limitToFirst(filters.limitToFirst);
+  }
   if (filters.limitToLast) {
     query = query.limitToLast(filters.limitToLast);
   }
 
   const snapshot = await query.once("value");
-  return snapshot.exists() ? snapshot.val() : {};
+  return snapshot.exists() ? snapshot.val() : undefined;
+};
+
+export const appendToList = async <T extends Record<string, any>>(
+  user: UserRecord,
+  relPath: string,
+  data: T
+) => {
+  const dbPath = getUserPath(relPath, user);
+  await database.ref(dbPath).push(data);
 };

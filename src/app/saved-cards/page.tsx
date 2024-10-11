@@ -19,7 +19,7 @@ import { useUser } from "../contexts/user-context";
 export default function MyCards() {
   const { user } = useUser();
 
-  const { data: cardData } = trpc.card.getAll.useQuery();
+  const { data: cardData, isLoading } = trpc.card.getAll.useQuery();
 
   const sortedCards = useMemo(() => {
     if (!cardData) {

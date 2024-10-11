@@ -24,11 +24,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { saveCardTransaction } from "@/helpers/firebase/database";
 import { cn } from "@/lib/utils";
 import { trpc } from "@/trpc-client/api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ReloadIcon } from "@radix-ui/react-icons";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import { CalendarIcon, IndianRupeeIcon } from "lucide-react";
@@ -54,29 +53,36 @@ const AddTransaction = () => {
       date: new Date(),
     },
   });
-  const queryClient = useQueryClient();
 
   const { data: cardData } = trpc.card.getAll.useQuery();
+  const trpcUtils = trpc.useUtils();
   const {
-    mutate: mutateCardTransaction,
+    mutateAsync: saveCardTransaction,
     isSuccess,
-    isPending,
-  } = useMutation({
-    mutationFn: saveCardTransaction,
+    isLoading,
+  } = trpc.transaction.add.useMutation({
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["card-transactions"] });
+      trpcUtils.transaction.invalidate();
     },
   });
 
   useEffect(() => {
-    if (isSuccess && !isPending) {
-      toast("Transaction added successfully");
-      router.push("/");
+    if (isSuccess && !isLoading) {
     }
-  }, [isPending, isSuccess, router]);
+  }, [isLoading, isSuccess, router]);
 
   const onSubmit = (values: TFormType) => {
-    mutateCardTransaction(values);
+    const { date, ...rest } = values;
+    saveCardTransaction({ ...rest, date: date.getTime() })
+      .then(() => {
+        toast("Transaction added successfully");
+        router.push("/");
+      })
+      .catch((error) => {
+        if (error.name === "TRPCClientError") {
+          toast(error.message);
+        }
+      });
   };
 
   const cardOptions = useMemo(() => {
@@ -185,7 +191,7 @@ const AddTransaction = () => {
                       selected={field.value}
                       onSelect={field.onChange}
                       disabled={(date) =>
-                        date > new Date() || date < new Date("1900-01-01")
+                        date > new Date() || date < new Date("2024-01-01")
                       }
                       initialFocus
                     />
@@ -195,7 +201,8 @@ const AddTransaction = () => {
               </FormItem>
             )}
           />
-          <Button className="w-full" type="submit">
+          <Button className="w-full" type="submit" disabled={isLoading}>
+            {isLoading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
             Submit
           </Button>
         </form>

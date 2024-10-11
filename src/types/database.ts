@@ -17,9 +17,9 @@ type TFetchTransaction = {
 };
 
 export type TFetch = {
-  relPath: string;
   user: UserRecord;
   equalTo?: string;
   endBefore?: number;
+  limitToFirst?: number;
   limitToLast?: number;
 } & (TFetchCard | TFetchTransaction);

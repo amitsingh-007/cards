@@ -28,7 +28,7 @@ export const CardDataRecordSchema = z.record(z.string(), CardDataSchema);
 export const CardTransactionFormSchema = z.object({
   cardId: z.string(),
   amount: z.number(),
-  date: z.date(),
+  date: z.number(),
 });
 
 export type TCardTransactionForm = z.infer<typeof CardTransactionFormSchema>;
