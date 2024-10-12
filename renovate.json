@@ -9,5 +9,6 @@
     ":maintainLockFilesMonthly",
     "schedule:monthly"
   ],
-  "baseBranches": ["renovate-updates"]
+  "baseBranches": ["renovate-updates"],
+  "ignoreDeps": ["@tanstack/react-query"]
 }
