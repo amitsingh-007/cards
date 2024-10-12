@@ -1,18 +1,10 @@
-"use client";
+'use client';
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useUser } from "./contexts/user-context";
-import DashboardHistory from "./dashboard-history";
-import DahsboardTable from "./dashboard-table";
-import { CustomSpinner } from "@/components/ui/custom-spinner";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import DashboardHistory from './dashboard-history';
+import DahsboardTable from './dashboard-table';
 
 export default function Home() {
-  const { user } = useUser();
-
-  if (!user) {
-    return <CustomSpinner className="w-14 h-14 mx-auto mt-22" />;
-  }
-
   return (
     <div className="mt-8">
       <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
