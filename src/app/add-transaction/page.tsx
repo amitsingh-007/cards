@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import CardName from "@/components/common/card-name";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import CardName from '@/components/common/card-name';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Form,
   FormControl,
@@ -10,34 +10,34 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from '@/components/ui/popover';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { cn } from "@/lib/utils";
-import { trpc } from "@/trpc-client/api";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ReloadIcon } from "@radix-ui/react-icons";
-import dayjs from "dayjs";
-import advancedFormat from "dayjs/plugin/advancedFormat";
-import { CalendarIcon, IndianRupeeIcon } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
-import { getCardBrand } from "../add-card/constants";
-import { formSchema } from "./constants";
+} from '@/components/ui/select';
+import { cn } from '@/lib/utils';
+import { trpc } from '@/trpc-client/api';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ReloadIcon } from '@radix-ui/react-icons';
+import dayjs from 'dayjs';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
+import { CalendarIcon, IndianRupeeIcon } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
+import { getCardBrand } from '../add-card/constants';
+import { formSchema } from './constants';
 
 dayjs.extend(advancedFormat);
 
@@ -49,37 +49,29 @@ const AddTransaction = () => {
   const form = useForm<TFormType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      cardId: searchParams.get("cardId") || undefined,
+      cardId: searchParams.get('cardId') || undefined,
       date: new Date(),
     },
   });
 
   const { data: cardData } = trpc.card.getAll.useQuery();
   const trpcUtils = trpc.useUtils();
-  const {
-    mutateAsync: saveCardTransaction,
-    isSuccess,
-    isLoading,
-  } = trpc.transaction.add.useMutation({
-    onSuccess: () => {
-      trpcUtils.transaction.invalidate();
-    },
-  });
-
-  useEffect(() => {
-    if (isSuccess && !isLoading) {
-    }
-  }, [isLoading, isSuccess, router]);
+  const { mutateAsync: saveCardTransaction, isLoading } =
+    trpc.transaction.add.useMutation({
+      onSuccess: async () => {
+        await trpcUtils.card.getAll.invalidate();
+      },
+    });
 
   const onSubmit = (values: TFormType) => {
     const { date, ...rest } = values;
     saveCardTransaction({ ...rest, date: date.getTime() })
       .then(() => {
-        toast("Transaction added successfully");
-        router.push("/");
+        toast('Transaction added successfully');
+        router.push('/');
       })
       .catch((error) => {
-        if (error.name === "TRPCClientError") {
+        if (error.name === 'TRPCClientError') {
           toast(error.message);
         }
       });
@@ -172,12 +164,12 @@ const AddTransaction = () => {
                       <Button
                         variant="outline"
                         className={cn(
-                          "pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground"
+                          'pl-3 text-left font-normal',
+                          !field.value && 'text-muted-foreground'
                         )}
                       >
                         {field.value ? (
-                          dayjs(field.value).format("Do MMMM YYYY")
+                          dayjs(field.value).format('Do MMMM YYYY')
                         ) : (
                           <span>Pick a date</span>
                         )}
@@ -191,7 +183,7 @@ const AddTransaction = () => {
                       selected={field.value}
                       onSelect={field.onChange}
                       disabled={(date) =>
-                        date > new Date() || date < new Date("2024-01-01")
+                        date > new Date() || date < new Date('2024-01-01')
                       }
                       initialFocus
                     />
