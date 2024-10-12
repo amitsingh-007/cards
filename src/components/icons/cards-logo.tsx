@@ -11,7 +11,7 @@ const CardsLogo = ({ className }: { className?: string }) => {
 
   return (
     <svg
-      className={clsx(className, 'border-[3px] rounded-2xl', {
+      className={clsx(className, 'h-auto border rounded-md py-[0px] px-[2px]', {
         'border-white': resolvedTheme === 'dark',
         'border-black': resolvedTheme === 'light',
       })}
