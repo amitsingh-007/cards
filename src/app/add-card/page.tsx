@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import CardName from "@/components/common/card-name";
-import { Button } from "@/components/ui/button";
+import CardName from '@/components/common/card-name';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -9,24 +9,23 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { trpc } from "@/trpc-client/api";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
-import { cardBrandList, formSchema } from "./constants";
-import { ReloadIcon } from "@radix-ui/react-icons";
+} from '@/components/ui/select';
+import { trpc } from '@/trpc-client/api';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ReloadIcon } from '@radix-ui/react-icons';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
+import { cardBrandList, formSchema } from './constants';
 
 type TFormType = z.infer<typeof formSchema>;
 
@@ -37,25 +36,17 @@ const AddCard = () => {
   });
 
   const trpcUtils = trpc.useUtils();
-  const {
-    mutate: addCard,
-    isSuccess,
-    isLoading,
-  } = trpc.card.add.useMutation({
-    onSuccess: () => {
-      trpcUtils.card.getAll.invalidate();
+  const { mutateAsync: addCard, isLoading } = trpc.card.add.useMutation({
+    onSuccess: async () => {
+      await trpcUtils.card.getAll.invalidate();
     },
   });
 
-  useEffect(() => {
-    if (isSuccess && !isLoading) {
-      toast("Card saved successfully");
-      router.push("/saved-cards");
-    }
-  }, [isLoading, isSuccess, router]);
-
   const onSubmit = (values: TFormType) => {
-    addCard(values);
+    addCard(values).then(() => {
+      toast('Card saved successfully');
+      router.push('/saved-cards');
+    });
   };
 
   return (
