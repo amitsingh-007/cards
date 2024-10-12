@@ -31,10 +31,10 @@ export const fetch = async ({ relPath, user, ...filters }: TFetch) => {
   return snapshot.exists() ? snapshot.val() : undefined;
 };
 
-export const appendToList = async <T extends Record<string, any>>(
+export const appendToList = async (
   user: UserRecord,
   relPath: string,
-  data: T
+  data: Record<string, unknown>
 ) => {
   const dbPath = getUserPath(relPath, user);
   await database.ref(dbPath).push(data);
