@@ -11,10 +11,11 @@ import {
 } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { trpc } from '@/trpc-client/api';
-import Image from 'next/image';
+import { Nfc } from 'lucide-react';
 import { useMemo } from 'react';
 import { getCardBrand } from '../add-card/constants';
 import { useUser } from '../contexts/user-context';
+import CardChip from './card-chip';
 
 export default function MyCards() {
   const { user } = useUser();
@@ -39,8 +40,8 @@ export default function MyCards() {
         <div className="grid md:grid-cols-2 gap-4 mt-4">
           {isLoading
             ? Array.from({ length: 4 }, (_, index) => (
-                <Card key={index}>
-                  <Skeleton className="rounded-xl border text-card-foreground shadow max-w-md h-[14.875rem]" />
+                <Card key={index} className="max-w-md">
+                  <Skeleton className="rounded-xl border text-card-foreground shadow h-[210px]" />
                 </Card>
               ))
             : sortedCards.map((cardDetails) => {
@@ -57,19 +58,8 @@ export default function MyCards() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="flex items-center justify-between pb-4">
-                      <Image
-                        src="/card-chip.png"
-                        width={40}
-                        height={40}
-                        alt="Card chip"
-                      />
-                      <Image
-                        src="/wireless.png"
-                        width={35}
-                        height={35}
-                        alt="Card chip"
-                        className="rotate-90"
-                      />
+                      <CardChip className="h-9" />
+                      <Nfc className="h-6" />
                     </CardContent>
                     <CardContent className="flex items-center gap-1 tracking-[5px] text-lg font-medium pb-4">
                       **** **** **** {cardDetails.cardLastDigits}
