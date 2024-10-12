@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import BillingDate from "@/components/common/billing-date";
-import CardName from "@/components/common/card-name";
+import BillingDate from '@/components/common/billing-date';
+import CardName from '@/components/common/card-name';
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { trpc } from "@/trpc-client/api";
-import Image from "next/image";
-import { useMemo } from "react";
-import { getCardBrand } from "../add-card/constants";
-import { useUser } from "../contexts/user-context";
+} from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
+import { trpc } from '@/trpc-client/api';
+import Image from 'next/image';
+import { useMemo } from 'react';
+import { getCardBrand } from '../add-card/constants';
+import { useUser } from '../contexts/user-context';
 
 export default function MyCards() {
   const { user } = useUser();

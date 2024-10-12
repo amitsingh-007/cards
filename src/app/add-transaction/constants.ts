@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const formSchema = z.object({
   cardId: z.string(),
@@ -7,7 +7,7 @@ export const formSchema = z.object({
     if (isNaN(parsed) || parsed <= 0) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Enter valid amount",
+        message: 'Enter valid amount',
       });
       return z.NEVER;
     }

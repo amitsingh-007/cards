@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import CardName from "@/components/common/card-name";
-import { Button } from "@/components/ui/button";
-import { Card, CardFooter, CardHeader } from "@/components/ui/card";
-import { trpc } from "@/trpc-client/api";
-import { ReloadIcon } from "@radix-ui/react-icons";
-import dayjs from "dayjs";
-import { useMemo } from "react";
-import { getFormattedPrice, getMergedTxnData } from "./utils";
+import CardName from '@/components/common/card-name';
+import { Button } from '@/components/ui/button';
+import { Card, CardFooter, CardHeader } from '@/components/ui/card';
+import { trpc } from '@/trpc-client/api';
+import { ReloadIcon } from '@radix-ui/react-icons';
+import dayjs from 'dayjs';
+import { useMemo } from 'react';
+import { getFormattedPrice, getMergedTxnData } from './utils';
 
 const DashboardHistory = () => {
   const { data: cardsData } = trpc.card.getAll.useQuery();
@@ -48,7 +48,7 @@ const DashboardHistory = () => {
               <span>{getFormattedPrice(transaction?.amount)}</span>
             </CardHeader>
             <CardFooter className="p-4 pt-0">
-              {dayjs(transaction.date).format("DD MMM YYYY")}
+              {dayjs(transaction.date).format('DD MMM YYYY')}
             </CardFooter>
           </Card>
         )

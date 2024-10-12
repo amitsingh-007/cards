@@ -1,42 +1,42 @@
-import { CardBrandEnum, TCardBrand } from "@/types/card";
-import { z } from "zod";
+import { CardBrandEnum, TCardBrand } from '@/types/card';
+import { z } from 'zod';
 
 export const cardBrandList: { id: TCardBrand; name: string }[] = [
   {
-    id: "icici",
-    name: "ICICI",
+    id: 'icici',
+    name: 'ICICI',
   },
   {
-    id: "hdfc",
-    name: "HDFC",
+    id: 'hdfc',
+    name: 'HDFC',
   },
   {
-    id: "sbi",
-    name: "SBI",
+    id: 'sbi',
+    name: 'SBI',
   },
   {
-    id: "kotak",
-    name: "Kotak",
+    id: 'kotak',
+    name: 'Kotak',
   },
   {
-    id: "axis",
-    name: "Axis",
+    id: 'axis',
+    name: 'Axis',
   },
   {
-    id: "indusind",
-    name: "Indusind",
+    id: 'indusind',
+    name: 'Indusind',
   },
   {
-    id: "hsbc",
-    name: "HSBC",
+    id: 'hsbc',
+    name: 'HSBC',
   },
   {
-    id: "niyo",
-    name: "Niyo",
+    id: 'niyo',
+    name: 'Niyo',
   },
   {
-    id: "onecard",
-    name: "OneCard",
+    id: 'onecard',
+    name: 'OneCard',
   },
 ];
 
@@ -45,19 +45,19 @@ export const getCardBrand = (brandName: string) =>
 
 export const formSchema = z.object({
   cardBrand: CardBrandEnum,
-  cardName: z.string().trim().min(1, "Card name is required"),
+  cardName: z.string().trim().min(1, 'Card name is required'),
   cardLastDigits: z
     .string()
     .trim()
-    .length(4, "Enter last 4 digits")
-    .regex(/^\d+$/, "Card number should contain only digits")
-    .transform((val) => Number(val)),
+    .length(4, 'Enter last 4 digits')
+    .regex(/^\d+$/, 'Card number should contain only digits')
+    .transform(Number),
   cardBillingDate: z.string().transform((val, ctx) => {
     const parsed = Number(val);
-    if (isNaN(parsed) || parsed < 1 || parsed > 31) {
+    if (Number.isNaN(parsed) || parsed < 1 || parsed > 31) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Enter a valid date",
+        message: 'Enter a valid date',
       });
       return z.NEVER;
     }

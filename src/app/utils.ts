@@ -1,5 +1,5 @@
-import { TCardData, TCardTransaction } from "@/types/card";
-import { InfiniteData } from "@tanstack/react-query";
+import { TCardData, TCardTransaction } from '@/types/card';
+import { InfiniteData } from '@tanstack/react-query';
 
 export const getMergedCardsData = (
   cardsData: Record<string, TCardData> | undefined,
@@ -8,15 +8,15 @@ export const getMergedCardsData = (
   if (!cardsData) {
     return [];
   }
-  const cardTransactionMap = !cardTransactions
-    ? new Map<string, TCardTransaction>()
-    : Object.entries(cardTransactions).reduce<Map<string, TCardTransaction>>(
+  const cardTransactionMap = cardTransactions
+    ? Object.entries(cardTransactions).reduce<Map<string, TCardTransaction>>(
         (map, [, transaction]) => {
           map.set(transaction.cardId, transaction);
           return map;
         },
         new Map()
-      );
+      )
+    : new Map<string, TCardTransaction>();
 
   return Object.entries(cardsData)
     .map(([cardId, cardDetails]) => {
@@ -58,8 +58,8 @@ export const getMergedTxnData = (
 
 export const getFormattedPrice = (price: number | undefined) =>
   price
-    ? `${new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "INR",
-      }).format(price)}`
-    : "-";
+    ? new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'INR',
+      }).format(price)
+    : '-';

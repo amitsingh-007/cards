@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import clsx from "clsx";
-import { useTheme } from "next-themes";
+import clsx from 'clsx';
+import { useTheme } from 'next-themes';
 
 const CardsLogo = ({ className }: { className?: string }) => {
   const { resolvedTheme } = useTheme();
 
-  const fillColor = resolvedTheme === "dark" ? "#ffffff" : "#000000";
-  const backgroundColor = resolvedTheme === "dark" ? "#000000" : "#ffffff";
+  const fillColor = resolvedTheme === 'dark' ? '#ffffff' : '#000000';
+  const backgroundColor = resolvedTheme === 'dark' ? '#000000' : '#ffffff';
 
   return (
     <svg
-      className={clsx(className, "border-[3px] rounded-2xl", {
-        "border-white": resolvedTheme === "dark",
-        "border-black": resolvedTheme === "light",
+      className={clsx(className, 'border-[3px] rounded-2xl', {
+        'border-white': resolvedTheme === 'dark',
+        'border-black': resolvedTheme === 'light',
       })}
       width="224"
       height="110"

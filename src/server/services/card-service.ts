@@ -1,7 +1,7 @@
-import { DB_PATHS } from "@/types/database";
-import { UserRecord } from "firebase-admin/auth";
-import { appendToList, fetch } from "../firebase-admin/database";
-import { TCardData } from "@/types/card";
+import { DB_PATHS } from '@/types/database';
+import { UserRecord } from 'firebase-admin/auth';
+import { appendToList, fetch } from '../firebase-admin/database';
+import { TCardData } from '@/types/card';
 
 export const getAllCards = async (user: UserRecord) => {
   return fetch({ relPath: DB_PATHS.CARDS, user });

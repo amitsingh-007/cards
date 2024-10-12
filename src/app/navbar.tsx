@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useUser } from "./contexts/user-context";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { UserRound } from "lucide-react";
+import { useUser } from './contexts/user-context';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { UserRound } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,14 +10,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useRouter } from "next/navigation";
-import ThemeToggle from "./theme-toggle";
-import Link from "next/link";
-import { signInWithGoogle, signOutUser } from "@/helpers/firebase/auth";
-import dynamic from "next/dynamic";
+} from '@/components/ui/dropdown-menu';
+import { useRouter } from 'next/navigation';
+import ThemeToggle from './theme-toggle';
+import Link from 'next/link';
+import { signInWithGoogle, signOutUser } from '@/helpers/firebase/auth';
+import dynamic from 'next/dynamic';
 
-const CardsLogo = dynamic(() => import("@/components/icons/cards-logo"), {
+const CardsLogo = dynamic(() => import('@/components/icons/cards-logo'), {
   ssr: false,
 });
 
@@ -37,7 +37,7 @@ const NavBar = () => {
         <DropdownMenu>
           <DropdownMenuTrigger>
             <Avatar>
-              <AvatarImage src={user?.photoURL ?? ""} />
+              <AvatarImage src={user?.photoURL ?? ''} />
               <AvatarFallback>
                 <UserRound />
               </AvatarFallback>
@@ -48,19 +48,19 @@ const NavBar = () => {
               <>
                 <DropdownMenuLabel>{user?.displayName}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => router.push("/")}>
+                <DropdownMenuItem onClick={() => router.push('/')}>
                   Dashboard
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onClick={() => router.push("/add-transaction")}
+                  onClick={() => router.push('/add-transaction')}
                 >
                   Record a transaction
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => router.push("/saved-cards")}>
+                <DropdownMenuItem onClick={() => router.push('/saved-cards')}>
                   Saved cards
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push("/add-card")}>
+                <DropdownMenuItem onClick={() => router.push('/add-card')}>
                   Add card
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />

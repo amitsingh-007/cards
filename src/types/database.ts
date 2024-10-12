@@ -1,9 +1,9 @@
-import { UserRecord } from "firebase-admin/auth";
-import { TCardData, TCardTransaction } from "./card";
+import { UserRecord } from 'firebase-admin/auth';
+import { TCardData, TCardTransaction } from './card';
 
 export enum DB_PATHS {
-  CARDS = "cards",
-  TRANSACTIONS = "transactions",
+  CARDS = 'cards',
+  TRANSACTIONS = 'transactions',
 }
 
 type TFetchCard = {

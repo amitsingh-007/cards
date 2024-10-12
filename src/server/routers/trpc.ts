@@ -1,9 +1,9 @@
-import { TRPCError, initTRPC } from "@trpc/server";
-import { getFirebaseUser, verifyAuthToken } from "../firebase-admin/auth";
-import { ITRPCContext } from "@/types/trpc";
+import { TRPCError, initTRPC } from '@trpc/server';
+import { getFirebaseUser, verifyAuthToken } from '../firebase-admin/auth';
+import { ITRPCContext } from '@/types/trpc';
 
 const getAuthBearer = (req: Request) =>
-  req.headers.get("authorization")?.split?.("Bearer ")?.[1];
+  req.headers.get('authorization')?.split?.('Bearer ')?.[1];
 
 const getLoggedInUser = async (idToken: string | undefined) => {
   if (!idToken) {
@@ -13,10 +13,10 @@ const getLoggedInUser = async (idToken: string | undefined) => {
     const { uid } = await verifyAuthToken(idToken, true);
     return await getFirebaseUser(uid);
   } catch (error) {
-    console.error("Error in getLoggedInUser: ", error);
+    console.error('Error in getLoggedInUser:', error);
     throw new TRPCError({
-      code: "UNAUTHORIZED",
-      message: "Firebase authorization failed",
+      code: 'UNAUTHORIZED',
+      message: 'Firebase authorization failed',
     });
   }
 };

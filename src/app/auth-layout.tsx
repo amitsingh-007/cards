@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useUser } from "./contexts/user-context";
+import { useUser } from './contexts/user-context';
 
 const AuthLayout = ({
   children,

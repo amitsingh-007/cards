@@ -1,11 +1,11 @@
-import dayjs from "dayjs";
-import advancedFormat from "dayjs/plugin/advancedFormat";
+import dayjs from 'dayjs';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
 
 dayjs.extend(advancedFormat);
 
 const ordinalBillingDate = (billingDate: number) => {
   const date = new Date(1990, 0, billingDate); // Dummy year and month
-  return dayjs(date).format("Do");
+  return dayjs(date).format('Do');
 };
 
 interface Props {
