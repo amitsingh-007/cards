@@ -45,7 +45,7 @@ const DashboardHistory = () => {
                 cardBrandId={cardDetails.cardBrand}
                 cardName={cardDetails.cardName}
               />
-              <span>{getFormattedPrice(transaction?.amount)}</span>
+              <span>{getFormattedPrice(transaction.amount)}</span>
             </CardHeader>
             <CardFooter className="p-4 pt-0">
               {dayjs(transaction.date).format('DD MMM YYYY')}

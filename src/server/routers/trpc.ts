@@ -3,7 +3,7 @@ import { getFirebaseUser, verifyAuthToken } from '../firebase-admin/auth';
 import { ITRPCContext } from '@/types/trpc';
 
 const getAuthBearer = (req: Request) =>
-  req.headers.get('authorization')?.split?.('Bearer ')?.[1];
+  req.headers.get('authorization')?.split('Bearer ')[1];
 
 const getLoggedInUser = async (idToken: string | undefined) => {
   if (!idToken) {

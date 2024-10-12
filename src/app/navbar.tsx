@@ -46,7 +46,7 @@ const NavBar = () => {
           <DropdownMenuContent className="w-44">
             {user ? (
               <>
-                <DropdownMenuLabel>{user?.displayName}</DropdownMenuLabel>
+                <DropdownMenuLabel>{user.displayName}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => router.push('/')}>
                   Dashboard

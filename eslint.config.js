@@ -9,8 +9,6 @@ import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
-// !NOTE: Add types to eslint-mocked-types.d.ts if getting TS error for plugins
-
 export default tseslint.config(
   gitignore(),
   eslint.configs.recommended,
@@ -28,7 +26,7 @@ export default tseslint.config(
     ...tseslint.configs.disableTypeChecked,
   },
   {
-    ignores: ['**/*.js', '**/*.mjs', '**/*.cjs'],
+    ignores: ['**/*.js', '**/*.mjs', '**/*.cjs', 'src/components/ui/'],
   },
   eslintPluginUnicorn.configs['flat/recommended'],
   // react eslint config
@@ -57,23 +55,16 @@ export default tseslint.config(
   // configure & override all rules
   {
     rules: {
-      /**
-       * TODO: Remove once this is closed
-       * @link https://github.com/typescript-eslint/typescript-eslint/issues/9902#issuecomment-2316722449
-       */
-      '@typescript-eslint/no-deprecated': 'off',
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-extraneous-class': 'off',
-      '@typescript-eslint/no-dynamic-delete': 'off',
-      '@typescript-eslint/no-unnecessary-condition': 'off',
+      '@typescript-eslint/no-unnecessary-condition': 'warn',
       '@typescript-eslint/no-floating-promises': 'off',
       '@typescript-eslint/no-confusing-void-expression': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
       '@typescript-eslint/no-unsafe-assignment': 'off',
       '@typescript-eslint/restrict-template-expressions': 'off',
       '@typescript-eslint/no-unsafe-member-access': 'off',
       '@typescript-eslint/no-misused-promises': 'off',
       '@typescript-eslint/no-unsafe-return': 'off',
-      '@typescript-eslint/no-unnecessary-type-parameters': 'off',
+      '@typescript-eslint/use-unknown-in-catch-callback-variable': 'off',
       '@typescript-eslint/no-base-to-string': [
         'error',
         {
@@ -89,13 +80,8 @@ export default tseslint.config(
         },
       ],
       'unicorn/prevent-abbreviations': 'off',
-      'unicorn/filename-case': 'off',
       'unicorn/no-null': 'off',
-      'unicorn/no-array-for-each': 'off',
       'unicorn/no-array-reduce': 'off',
-      'unicorn/prefer-ternary': 'off',
-      'unicorn/prefer-query-selector': 'off',
-      'unicorn/prefer-dom-node-dataset': 'off',
       'unicorn/explicit-length-check': 'off',
       'unicorn/no-useless-undefined': 'off',
     },
