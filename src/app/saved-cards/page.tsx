@@ -40,7 +40,7 @@ export default function MyCards() {
         {isLoading
           ? Array.from({ length: 4 }, (_, index) => (
               <Card key={index} className="max-w-md">
-                <Skeleton className="rounded-xl border text-card-foreground shadow h-[210px]" />
+                <Skeleton className="rounded-xl h-[210px]" />
               </Card>
             ))
           : sortedCards.map((cardDetails) => {

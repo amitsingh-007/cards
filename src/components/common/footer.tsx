@@ -18,6 +18,7 @@ const Footer = () => {
         href="https://github.com/amitsingh-007/cards"
         target="_blank"
         className="opacity-60 hover:opacity-100"
+        title="Cards GitHub"
       >
         <GitHubLogoIcon className="h-7 w-7" />
       </Link>

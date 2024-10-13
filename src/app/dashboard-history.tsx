@@ -8,14 +8,17 @@ import { ReloadIcon } from '@radix-ui/react-icons';
 import dayjs from 'dayjs';
 import { useMemo } from 'react';
 import { getFormattedPrice, getMergedTxnData } from './utils';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const DashboardHistory = () => {
-  const { data: cardsData } = trpc.card.getAll.useQuery();
+  const { data: cardsData, isInitialLoading: isInitialCardLoading } =
+    trpc.card.getAll.useQuery();
   const {
     data: allTransactionsData,
     fetchNextPage,
     hasNextPage,
     isFetching,
+    isInitialLoading: isInitialTxnLoading,
   } = trpc.transaction.getByPagination.useInfiniteQuery(
     {},
     {
@@ -35,8 +38,15 @@ const DashboardHistory = () => {
     [cardsData, allTransactionsData]
   );
 
+  const isInitialLoading = isInitialCardLoading || isInitialTxnLoading;
   return (
     <div className="flex flex-col gap-4 w-full sm:w-[600px] mx-auto">
+      {isInitialLoading &&
+        Array.from({ length: 4 }, (_, index) => (
+          <Card key={index}>
+            <Skeleton className="rounded-xl h-[104px]" />
+          </Card>
+        ))}
       {recentTransactionsData.map(
         ({ cardDetails, transaction, transactionId }) => (
           <Card key={transactionId}>
