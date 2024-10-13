@@ -55,13 +55,8 @@ const AddTransaction = () => {
   });
 
   const { data: cardData } = trpc.card.getAll.useQuery();
-  const trpcUtils = trpc.useUtils();
   const { mutateAsync: saveCardTransaction, isLoading } =
-    trpc.transaction.add.useMutation({
-      onSuccess: async () => {
-        await trpcUtils.card.getAll.invalidate();
-      },
-    });
+    trpc.transaction.add.useMutation();
 
   const onSubmit = (values: TFormType) => {
     const { date, ...rest } = values;
