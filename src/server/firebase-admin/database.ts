@@ -1,7 +1,7 @@
-import { getDatabase, Query } from "firebase-admin/database";
-import { firebaseAdmin } from ".";
-import { UserRecord } from "firebase-admin/auth";
-import { TFetch } from "@/types/database";
+import { getDatabase, Query } from 'firebase-admin/database';
+import { firebaseAdmin } from '.';
+import { UserRecord } from 'firebase-admin/auth';
+import { TFetch } from '@/types/database';
 
 const database = getDatabase(firebaseAdmin);
 
@@ -27,14 +27,14 @@ export const fetch = async ({ relPath, user, ...filters }: TFetch) => {
     query = query.limitToLast(filters.limitToLast);
   }
 
-  const snapshot = await query.once("value");
+  const snapshot = await query.once('value');
   return snapshot.exists() ? snapshot.val() : undefined;
 };
 
-export const appendToList = async <T extends Record<string, any>>(
+export const appendToList = async (
   user: UserRecord,
   relPath: string,
-  data: T
+  data: Record<string, unknown>
 ) => {
   const dbPath = getUserPath(relPath, user);
   await database.ref(dbPath).push(data);

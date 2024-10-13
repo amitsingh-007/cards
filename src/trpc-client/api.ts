@@ -5,6 +5,7 @@ import { httpBatchLink, loggerLink } from '@trpc/client';
 import { createTRPCReact } from '@trpc/react-query';
 
 const getBaseUrl = () => {
+  // eslint-disable-next-line unicorn/prefer-global-this
   if (typeof window !== 'undefined') {
     return '';
   }

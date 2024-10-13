@@ -7,8 +7,8 @@ import {
   signOut,
   User,
   getIdToken,
-} from "firebase/auth";
-import firebaseApp from ".";
+} from 'firebase/auth';
+import firebaseApp from '.';
 
 const auth = getAuth(firebaseApp);
 
@@ -19,7 +19,7 @@ export const signInWithGoogle = () =>
     .then((result) => {
       const credential = GoogleAuthProvider.credentialFromResult(result);
       if (!credential) {
-        throw new Error("No credential");
+        throw new Error('No credential');
       }
       return result.user;
     })
@@ -35,7 +35,7 @@ export const signOutUser = () => signOut(auth);
 
 export const getCurrentUser = () => {
   if (!auth.currentUser) {
-    throw new Error("No user");
+    throw new Error('No user');
   }
   return auth.currentUser;
 };

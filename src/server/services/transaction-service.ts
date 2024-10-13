@@ -1,8 +1,8 @@
-import { TCardTransaction, TCardTransactionForm } from "@/types/card";
-import { DB_PATHS } from "@/types/database";
-import { TRPCError } from "@trpc/server";
-import { UserRecord } from "firebase-admin/auth";
-import { appendToList, fetch } from "../firebase-admin/database";
+import { TCardTransaction, TCardTransactionForm } from '@/types/card';
+import { DB_PATHS } from '@/types/database';
+import { TRPCError } from '@trpc/server';
+import { UserRecord } from 'firebase-admin/auth';
+import { appendToList, fetch } from '../firebase-admin/database';
 
 const getShortKey = (month: number, year: number) => `${year}-${month}`;
 
@@ -17,7 +17,7 @@ export const getTransactionsByMonthYear = async (
   const transactions = await fetch({
     relPath: DB_PATHS.TRANSACTIONS,
     user,
-    orderByChild: "__shortKey",
+    orderByChild: '__shortKey',
     equalTo: getShortKey(month, year),
   });
   return transactions ?? {};
@@ -30,7 +30,7 @@ export const getPaginatedTransactions = async (
   return fetch({
     relPath: DB_PATHS.TRANSACTIONS,
     user,
-    orderByChild: "date",
+    orderByChild: 'date',
     endBefore: cursor,
     limitToLast: 5,
   });
@@ -48,14 +48,14 @@ export const saveTransaction = async (
   const sameMonthTransaction = await fetch({
     user,
     relPath: DB_PATHS.TRANSACTIONS,
-    orderByChild: "__fullKey",
+    orderByChild: '__fullKey',
     equalTo: fullKey,
     limitToFirst: 1,
   });
   if (sameMonthTransaction) {
     throw new TRPCError({
-      code: "BAD_REQUEST",
-      message: "Transaction already exists for this month",
+      code: 'BAD_REQUEST',
+      message: 'Transaction already exists for this month',
     });
   }
 
