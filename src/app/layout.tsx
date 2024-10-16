@@ -38,8 +38,8 @@ export default function RootLayout({
       <body className={`${poppins.className} antialiased`}>
         <Providers>
           <NavBar />
-          {/* NOTE: header height = 96px, footer height = 65px */}
-          <main className="container min-h-[calc(100vh-96px-65px)]">
+          {/* NOTE: header height = 96px, footer height = 72px */}
+          <main className="container min-h-[calc(100vh-96px-72px)]">
             <AuthLayout>{children}</AuthLayout>
           </main>
           <Footer />

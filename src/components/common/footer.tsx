@@ -9,7 +9,7 @@ const CardsLogo = dynamic(() => import('@/components/icons/cards-logo'), {
 
 const Footer = () => {
   return (
-    <footer className="flex justify-between py-4 px-10 border-t">
+    <footer className="flex justify-between mt-2 py-4 px-10 border-t">
       <div className="flex gap-4 items-center">
         <CardsLogo className="h-auto w-16" />
         <span className="text-sm text-muted-foreground">© 2024 Cards</span>
