@@ -1,5 +1,5 @@
 import { Toaster } from '@/components/ui/sonner';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Poppins } from 'next/font/google';
 import './globals.css';
 import Providers from './providers';
@@ -25,6 +25,12 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -38,8 +44,8 @@ export default function RootLayout({
       <body className={`${poppins.className} antialiased`}>
         <Providers>
           <NavBar />
-          {/* NOTE: header height = 96px, footer height = 65px */}
-          <main className="container min-h-[calc(100vh-96px-65px)]">
+          {/* NOTE: header height = 96px, footer height = 72px */}
+          <main className="container min-h-[calc(100vh-96px-72px)]">
             <AuthLayout>{children}</AuthLayout>
           </main>
           <Footer />
