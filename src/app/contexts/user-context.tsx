@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { onAuthStateChange } from "@/helpers/firebase/auth";
-import { User } from "firebase/auth";
+import { onAuthStateChange } from '@/helpers/firebase/auth';
+import { User } from 'firebase/auth';
 import {
   createContext,
   Dispatch,
@@ -10,7 +10,7 @@ import {
   useEffect,
   useMemo,
   useState,
-} from "react";
+} from 'react';
 
 type IUserContext = {
   user: User | undefined;

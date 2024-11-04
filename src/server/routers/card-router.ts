@@ -1,7 +1,7 @@
-import { CardDataRecordSchema, CardDataSchema } from "@/types/card";
-import { addCard, getAllCards } from "../services/card-service";
-import { protectedProcedure } from "./procedures";
-import { t } from "./trpc";
+import { CardDataRecordSchema, CardDataSchema } from '@/types/card';
+import { addCard, getAllCards } from '../services/card-service';
+import { protectedProcedure } from './procedures';
+import { t } from './trpc';
 
 const cardRouter = t.router({
   getAll: protectedProcedure

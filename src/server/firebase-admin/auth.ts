@@ -1,5 +1,5 @@
-import { getAuth } from "firebase-admin/auth";
-import { firebaseAdmin } from ".";
+import { getAuth } from 'firebase-admin/auth';
+import { firebaseAdmin } from '.';
 
 const auth = getAuth(firebaseAdmin);
 

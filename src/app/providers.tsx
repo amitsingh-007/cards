@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { trpc, trpcClient } from "../trpc-client/api";
-import { UserContextProvider } from "./contexts/user-context";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ThemeProvider as NextThemesProvider } from 'next-themes';
+import { trpc, trpcClient } from '../trpc-client/api';
+import { UserContextProvider } from './contexts/user-context';
 
 const queryClient = new QueryClient({
   defaultOptions: {
