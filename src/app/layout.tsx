@@ -15,13 +15,20 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: 'Cards',
   description: 'Track credit card payments',
+  applicationName: 'Cards',
+  manifest: '/manifest.webmanifest.json',
   robots: {
     index: false,
     follow: false,
   },
   icons: {
-    icon: '/favicon.ico',
-    apple: '/favicon.ico',
+    icon: '/cards_192.png',
+    apple: '/apple-touch-icon.png',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en',
+    title: 'Cards',
   },
 };
 
