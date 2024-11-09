@@ -1,5 +1,5 @@
 <p align="center">
-  <img  src="https://track-cards.vercel.app/favicon.ico">
+  <img  src="https://track-cards.vercel.app/cards_192.png" height="80" width="80">
 </p>
 <h1 align="center">
    Cards
