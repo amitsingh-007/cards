@@ -6,7 +6,7 @@ export const getMergedCardsData = (
   cardTransactions: Record<string, TCardTransaction> | undefined
 ) => {
   if (!cardsData) {
-    return [];
+    return { monthCardsData: [], total: 0 };
   }
   const cardTransactionMap = cardTransactions
     ? Object.entries(cardTransactions).reduce<Map<string, TCardTransaction>>(
@@ -18,9 +18,11 @@ export const getMergedCardsData = (
       )
     : new Map<string, TCardTransaction>();
 
-  return Object.entries(cardsData)
+  let total = 0;
+  const monthCardsData = Object.entries(cardsData)
     .map(([cardId, cardDetails]) => {
       const transaction = cardTransactionMap.get(cardId);
+      total += transaction?.amount || 0;
 
       return {
         cardId: cardId,
@@ -31,6 +33,7 @@ export const getMergedCardsData = (
     .sort(
       (a, b) => a.cardDetails.cardBillingDate - b.cardDetails.cardBillingDate
     );
+  return { monthCardsData, total };
 };
 
 export const getMergedTxnData = (
