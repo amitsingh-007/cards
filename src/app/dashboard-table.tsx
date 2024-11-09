@@ -51,7 +51,7 @@ const DahsboardTable = () => {
       { enabled: !!user, refetchOnMount: true }
     );
 
-  const monthCardsData = useMemo(
+  const { monthCardsData, total } = useMemo(
     () => getMergedCardsData(cardsData, cardTransactions),
     [cardsData, cardTransactions]
   );
@@ -107,7 +107,7 @@ const DahsboardTable = () => {
             <TableBody>
               <TableRow>
                 <TableCell colSpan={4} className="p-0">
-                  <Skeleton className="rounded-none h-32 sm:h-96" />
+                  <Skeleton className="rounded-none h-60 sm:h-96" />
                 </TableCell>
               </TableRow>
             </TableBody>
@@ -152,6 +152,12 @@ const DahsboardTable = () => {
                   </TableRow>
                 );
               })}
+              <TableRow className="bg-muted/50">
+                <TableCell className="font-bold py-3 pl-9" colSpan={2}>
+                  Total
+                </TableCell>
+                <TableCell colSpan={2}> {getFormattedPrice(total)}</TableCell>
+              </TableRow>
             </TableBody>
           )}
         </Table>
