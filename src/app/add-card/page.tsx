@@ -118,6 +118,7 @@ const AddCard = () => {
                     placeholder="Enter card name"
                     autoComplete="off"
                     type="number"
+                    inputMode="numeric"
                     {...field}
                   />
                 </FormControl>
@@ -136,6 +137,7 @@ const AddCard = () => {
                     placeholder="Enter card name"
                     autoComplete="off"
                     type="number"
+                    inputMode="numeric"
                     {...field}
                   />
                 </FormControl>
