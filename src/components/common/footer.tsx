@@ -1,3 +1,5 @@
+'use client';
+
 import { GitHubLogoIcon } from '@radix-ui/react-icons';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
