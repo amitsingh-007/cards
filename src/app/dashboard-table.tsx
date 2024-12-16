@@ -23,7 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { MoreHorizontal } from 'lucide-react';
+import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { getCardBrand } from './add-card/constants';
@@ -34,6 +34,8 @@ import BillingDate from '@/components/common/billing-date';
 import { trpc } from '@/trpc-client/api';
 import { Skeleton } from '@/components/ui/skeleton';
 
+const JANUARY = MONTHS[0];
+const DECEMBER = MONTHS[11];
 const currentMonth = new Date().getMonth();
 const currentYear = new Date().getFullYear();
 
@@ -51,6 +53,14 @@ const DahsboardTable = () => {
       { enabled: !!user, refetchOnMount: true }
     );
 
+  const handlePrevMonthClick = () => {
+    setSelectedMonth((prevMonth) => Math.max(prevMonth - 1, JANUARY.value));
+  };
+
+  const handleNextMonthClick = () => {
+    setSelectedMonth((prevMonth) => Math.min(prevMonth + 1, DECEMBER.value));
+  };
+
   const { monthCardsData, total } = useMemo(
     () => getMergedCardsData(cardsData, cardTransactions),
     [cardsData, cardTransactions]
@@ -60,6 +70,24 @@ const DahsboardTable = () => {
   return (
     <div className="sm:w-[1000px] mx-auto">
       <div className="flex justify-end items-center gap-4 mt-6">
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="icon"
+            disabled={selectedMonth === JANUARY.value}
+            onClick={handlePrevMonthClick}
+          >
+            <ChevronLeft />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            disabled={selectedMonth === DECEMBER.value}
+            onClick={handleNextMonthClick}
+          >
+            <ChevronRight />
+          </Button>
+        </div>
         <Select
           value={selectedMonth.toString()}
           onValueChange={(newMonth) => setSelectedMonth(Number(newMonth))}
