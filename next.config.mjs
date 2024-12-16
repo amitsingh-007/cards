@@ -1,12 +1,9 @@
-import("./src/server/env.mjs");
+import('./src/server/env.mjs');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    missingSuspenseWithCSRBailout: false,
-  },
   env: {
-    NEXT_PUBLIC_ENV: process.env.VERCEL_ENV || "development",
+    NEXT_PUBLIC_ENV: process.env.VERCEL_ENV || 'development',
   },
 };
 
