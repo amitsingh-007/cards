@@ -1,12 +1,12 @@
 import { COLLECTION } from '@/types/database';
 import { UserRecord } from 'firebase-admin/auth';
-import { appendToList, fetch } from '../firebase-admin/database';
-import { TCardData } from '@/types/firestore';
+import { addToCollection, fetch } from '../firebase-admin/firestore';
+import { TCardForm } from '@/types/form';
 
 export const getAllCards = async (user: UserRecord) => {
-  return fetch({ relPath: COLLECTION.CARDS, user });
+  return fetch({ user, collection: COLLECTION.CARDS });
 };
 
-export const addCard = async (user: UserRecord, card: TCardData) => {
-  await appendToList(user, COLLECTION.CARDS, card);
+export const addCard = async (user: UserRecord, data: TCardForm) => {
+  await addToCollection(user, COLLECTION.CARDS, data);
 };

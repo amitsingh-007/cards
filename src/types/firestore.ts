@@ -1,27 +1,14 @@
 import { z } from 'zod';
+import { CardBrandEnum } from '.';
 
-export const CardBrandEnum = z.enum([
-  'icici',
-  'hdfc',
-  'sbi',
-  'kotak',
-  'axis',
-  'indusind',
-  'hsbc',
-  'niyo',
-  'onecard',
-]);
-export type TCardBrand = z.infer<typeof CardBrandEnum>;
-
-export const CardDataSchema = z.object({
+export const CardSchema = z.object({
+  id: z.string(),
   cardBrand: CardBrandEnum,
   cardName: z.string(),
   cardLastDigits: z.number(),
   cardBillingDate: z.number(),
 });
-export type TCardData = z.infer<typeof CardDataSchema>;
-
-export const CardDataRecordSchema = z.record(z.string(), CardDataSchema);
+export type TCard = z.infer<typeof CardSchema>;
 
 export const CardTransactionSchema = z.object({
   id: z.string(),

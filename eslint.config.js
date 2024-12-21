@@ -84,6 +84,7 @@ export default tseslint.config(
       'unicorn/no-array-reduce': 'off',
       'unicorn/explicit-length-check': 'off',
       'unicorn/no-useless-undefined': 'off',
+      'unicorn/no-array-for-each': 'off',
     },
   },
   // ? NOTE: always keep this at last; prettier eslint config.

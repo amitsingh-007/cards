@@ -41,22 +41,20 @@ const DashboardHistory = () => {
             <Skeleton className="rounded-xl h-[104px]" />
           </Card>
         ))}
-      {recentTransactionsData.map(
-        ({ cardDetails, transaction, transactionId }) => (
-          <Card key={transactionId}>
-            <CardHeader className="flex flex-row justify-between p-4">
-              <CardName
-                cardBrandId={cardDetails.cardBrand}
-                cardName={cardDetails.cardName}
-              />
-              <span>{getFormattedPrice(transaction.amount)}</span>
-            </CardHeader>
-            <CardFooter className="p-4 pt-0">
-              {dayjs(transaction.date).format('DD MMM YYYY')}
-            </CardFooter>
-          </Card>
-        )
-      )}
+      {recentTransactionsData.map(({ cardDetails, transaction }) => (
+        <Card key={transaction.id}>
+          <CardHeader className="flex flex-row justify-between p-4">
+            <CardName
+              cardBrandId={cardDetails.cardBrand}
+              cardName={cardDetails.cardName}
+            />
+            <span>{getFormattedPrice(transaction.amount)}</span>
+          </CardHeader>
+          <CardFooter className="p-4 pt-0">
+            {dayjs(transaction.date).format('DD MMM YYYY')}
+          </CardFooter>
+        </Card>
+      ))}
       {hasNextPage && (
         <Button
           onClick={() => fetchNextPage()}

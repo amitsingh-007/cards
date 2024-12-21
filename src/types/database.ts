@@ -1,6 +1,6 @@
 import { UserRecord } from 'firebase-admin/auth';
 import { OrderByDirection, WhereFilterOp } from 'firebase-admin/firestore';
-import { CardDataSchema, CardTransactionSchema, TCardData } from './firestore';
+import { CardSchema, CardTransactionSchema, TCard } from './firestore';
 import { z } from 'zod';
 
 export enum COLLECTION {
@@ -9,13 +9,13 @@ export enum COLLECTION {
 }
 
 export const CollectionSchema = {
-  [COLLECTION.CARDS]: CardDataSchema,
+  [COLLECTION.CARDS]: CardSchema,
   [COLLECTION.TRANSACTIONS]: CardTransactionSchema,
 };
 
 type TFetchCard = {
   relPath: COLLECTION.CARDS;
-  orderByChild?: keyof TCardData;
+  orderByChild?: keyof TCard;
 };
 
 export type TFetch = {
