@@ -20,16 +20,14 @@ import CardChip from './card-chip';
 export default function MyCards() {
   const { user } = useUser();
 
-  const { data: cardData, isLoading } = trpc.card.getAll.useQuery();
+  const { data: cards, isLoading } = trpc.card.getAll.useQuery();
 
   const sortedCards = useMemo(() => {
-    if (!cardData) {
+    if (!cards) {
       return [];
     }
-    return Object.entries(cardData)
-      .map(([cardId, card]) => ({ ...card, cardId }))
-      .sort((a, b) => a.cardName.localeCompare(b.cardName));
-  }, [cardData]);
+    return cards.sort((a, b) => a.cardName.localeCompare(b.cardName));
+  }, [cards]);
 
   return (
     <>
@@ -43,16 +41,16 @@ export default function MyCards() {
                 <Skeleton className="rounded-xl h-[210px]" />
               </Card>
             ))
-          : sortedCards.map((cardDetails) => {
-              const cardBrand = getCardBrand(cardDetails.cardBrand);
+          : sortedCards.map((card) => {
+              const cardBrand = getCardBrand(card.cardBrand);
 
               return (
-                <Card key={cardDetails.cardId} className="max-w-md">
+                <Card key={card.id} className="max-w-md">
                   <CardHeader className="pb-4">
                     <CardTitle>
                       <CardName
                         cardBrandId={cardBrand?.id}
-                        cardName={cardDetails.cardName}
+                        cardName={card.cardName}
                       />
                     </CardTitle>
                   </CardHeader>
@@ -61,14 +59,14 @@ export default function MyCards() {
                     <Nfc className="h-6" />
                   </CardContent>
                   <CardContent className="flex items-center gap-1 tracking-[5px] text-lg font-medium pb-4">
-                    **** **** **** {cardDetails.cardLastDigits}
+                    **** **** **** {card.cardLastDigits}
                   </CardContent>
                   <CardFooter className="flex items-center justify-between">
                     <p className="uppercase text-lg font-semibold tracking-widest">
                       {user?.displayName}
                     </p>
                     <BillingDate
-                      billingDate={cardDetails.cardBillingDate}
+                      billingDate={card.cardBillingDate}
                       ordinalClassName="font-medium"
                     />
                   </CardFooter>

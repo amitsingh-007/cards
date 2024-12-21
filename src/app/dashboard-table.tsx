@@ -141,19 +141,19 @@ const DahsboardTable = () => {
             </TableBody>
           ) : (
             <TableBody>
-              {monthCardsData.map(({ cardId, cardDetails, transaction }) => {
-                const cardBrand = getCardBrand(cardDetails.cardBrand);
+              {monthCardsData.map(({ card, transaction }) => {
+                const cardBrand = getCardBrand(card.cardBrand);
 
                 return (
-                  <TableRow key={cardId}>
+                  <TableRow key={card.id}>
                     <TableCell className="font-medium">
                       <CardName
                         cardBrandId={cardBrand?.id}
-                        cardName={cardDetails.cardName}
+                        cardName={card.cardName}
                       />
                     </TableCell>
                     <TableCell>
-                      <BillingDate billingDate={cardDetails.cardBillingDate} />
+                      <BillingDate billingDate={card.cardBillingDate} />
                     </TableCell>
                     <TableCell>
                       {getFormattedPrice(transaction?.amount)}
@@ -169,7 +169,7 @@ const DahsboardTable = () => {
                           <DropdownMenuItem
                             disabled={!!transaction}
                             onClick={() => {
-                              router.push(`/add-transaction?cardId=${cardId}`);
+                              router.push(`/add-transaction?cardId=${card.id}`);
                             }}
                           >
                             Record transaction

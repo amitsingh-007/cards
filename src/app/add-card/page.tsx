@@ -44,7 +44,7 @@ const AddCard = () => {
 
   const onSubmit = (values: TFormType) => {
     addCard(values).then(() => {
-      toast('Card saved successfully');
+      toast.success('Card saved successfully');
       router.push('/saved-cards');
     });
   };
