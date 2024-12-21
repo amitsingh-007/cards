@@ -1,4 +1,4 @@
-import { CardBrandEnum, TCardBrand } from '@/types/card';
+import { CardBrandEnum, TCardBrand } from '@/types/firestore';
 import { z } from 'zod';
 
 export const cardBrandList: { id: TCardBrand; name: string }[] = [

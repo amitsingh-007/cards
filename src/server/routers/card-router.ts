@@ -1,4 +1,4 @@
-import { CardDataRecordSchema, CardDataSchema } from '@/types/card';
+import { CardDataRecordSchema, CardDataSchema } from '@/types/firestore';
 import { addCard, getAllCards } from '../services/card-service';
 import { protectedProcedure } from './procedures';
 import { t } from './trpc';

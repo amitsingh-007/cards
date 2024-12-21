@@ -23,13 +23,7 @@ const DashboardHistory = () => {
     {},
     {
       initialCursor: Date.now(),
-      getNextPageParam: (lastPage) => {
-        if (!lastPage) return undefined;
-        const transactions = Object.values(lastPage).sort(
-          (a, b) => b.date - a.date
-        );
-        return transactions.at(-1)?.date;
-      },
+      getNextPageParam: (lastPage) => lastPage?.at(-1)?.date,
     }
   );
 

@@ -1,21 +1,15 @@
-import { TCardData, TCardTransaction } from '@/types/card';
+import { TCardData, TCardTransaction } from '@/types/firestore';
 import { InfiniteData } from '@tanstack/react-query';
 
 export const getMergedCardsData = (
   cardsData: Record<string, TCardData> | undefined,
-  cardTransactions: Record<string, TCardTransaction> | undefined
+  cardTransactions: TCardTransaction[] | undefined
 ) => {
   if (!cardsData) {
     return { monthCardsData: [], total: 0 };
   }
-  const cardTransactionMap = cardTransactions
-    ? Object.entries(cardTransactions).reduce<Map<string, TCardTransaction>>(
-        (map, [, transaction]) => {
-          map.set(transaction.cardId, transaction);
-          return map;
-        },
-        new Map()
-      )
+  const cardTransactionMap = cardTransactions?.length
+    ? new Map(cardTransactions.map((txn) => [txn.cardId, txn]))
     : new Map<string, TCardTransaction>();
 
   let total = 0;
@@ -38,9 +32,7 @@ export const getMergedCardsData = (
 
 export const getMergedTxnData = (
   cardsData: Record<string, TCardData> | undefined,
-  cardTransactions:
-    | InfiniteData<Record<string, TCardTransaction> | undefined>
-    | undefined
+  cardTransactions: InfiniteData<TCardTransaction[] | undefined> | undefined
 ) => {
   if (!cardsData || !cardTransactions) {
     return [];
@@ -48,9 +40,12 @@ export const getMergedTxnData = (
 
   return cardTransactions.pages
     .flatMap((page) => {
-      return Object.entries(page || {}).map(([transactionId, transaction]) => {
+      if (!page?.length) {
+        return [];
+      }
+      return page.map((transaction) => {
         return {
-          transactionId,
+          transactionId: transaction.id,
           cardDetails: cardsData[transaction.cardId],
           transaction,
         };

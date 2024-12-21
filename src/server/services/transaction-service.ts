@@ -1,26 +1,45 @@
-import { TCardTransaction, TCardTransactionForm } from '@/types/card';
-import { DB_PATHS } from '@/types/database';
+import { COLLECTION, TCondition } from '@/types/database';
+import { TCardTransactionForm } from '@/types/form';
 import { TRPCError } from '@trpc/server';
 import { UserRecord } from 'firebase-admin/auth';
-import { appendToList, fetch } from '../firebase-admin/database';
+import { addToCollection, fetch } from '../firebase-admin/firestore';
 
-const getShortKey = (month: number, year: number) => `${year}-${month}`;
+const monthFilter = (
+  month: number,
+  year: number
+): TCondition<COLLECTION.TRANSACTIONS>[] => {
+  const startDate = new Date(year, month, 1).getTime();
+  const endDate = new Date(year, month + 1, 1).getTime();
+  return [
+    {
+      fieldPath: 'date',
+      opStr: '>=',
+      value: startDate,
+    },
+    {
+      fieldPath: 'date',
+      opStr: '<',
+      value: endDate,
+    },
+  ];
+};
 
-const getFullKey = (month: number, year: number, cardId: string) =>
-  `${year}-${month}-${cardId}`;
+const cardFilter = (cardId: string): TCondition<COLLECTION.TRANSACTIONS> => ({
+  fieldPath: 'cardId',
+  opStr: '==',
+  value: cardId,
+});
 
 export const getTransactionsByMonthYear = async (
   user: UserRecord,
   month: number,
   year: number
 ) => {
-  const transactions = await fetch({
-    relPath: DB_PATHS.TRANSACTIONS,
+  return fetch({
     user,
-    orderByChild: '__shortKey',
-    equalTo: getShortKey(month, year),
+    collection: COLLECTION.TRANSACTIONS,
+    conditions: monthFilter(month, year),
   });
-  return transactions ?? {};
 };
 
 export const getPaginatedTransactions = async (
@@ -28,11 +47,12 @@ export const getPaginatedTransactions = async (
   cursor: number
 ) => {
   return fetch({
-    relPath: DB_PATHS.TRANSACTIONS,
     user,
-    orderByChild: 'date',
-    endBefore: cursor,
-    limitToLast: 5,
+    collection: COLLECTION.TRANSACTIONS,
+    orderBy: 'date',
+    orderDir: 'desc',
+    startAfter: cursor,
+    limit: 5,
   });
 };
 
@@ -41,30 +61,23 @@ export const saveTransaction = async (
   transaction: TCardTransactionForm
 ) => {
   const date = new Date(transaction.date);
-  const month = date.getMonth();
-  const year = date.getFullYear();
-  const fullKey = getFullKey(month, year, transaction.cardId);
 
+  // TODO: use exists
   const sameMonthTransaction = await fetch({
     user,
-    relPath: DB_PATHS.TRANSACTIONS,
-    orderByChild: '__fullKey',
-    equalTo: fullKey,
-    limitToFirst: 1,
+    collection: COLLECTION.TRANSACTIONS,
+    conditions: [
+      ...monthFilter(date.getMonth(), date.getFullYear()),
+      cardFilter(transaction.cardId),
+    ],
+    limit: 1,
   });
-  if (sameMonthTransaction) {
+  if (sameMonthTransaction.length > 0) {
     throw new TRPCError({
       code: 'BAD_REQUEST',
       message: 'Transaction already exists for this month',
     });
   }
 
-  const cardTransaction: TCardTransaction = {
-    __shortKey: getShortKey(month, year),
-    __fullKey: fullKey,
-    cardId: transaction.cardId,
-    amount: transaction.amount,
-    date: date.getTime(),
-  };
-  await appendToList(user, DB_PATHS.TRANSACTIONS, cardTransaction);
+  await addToCollection(user, COLLECTION.TRANSACTIONS, transaction);
 };

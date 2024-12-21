@@ -1,7 +1,4 @@
-import {
-  CardTransactionFormSchema,
-  CardTransactionRecordSchema,
-} from '@/types/card';
+import { CardTransactionSchema } from '@/types/firestore';
 import { z } from 'zod';
 import { protectedProcedure } from './procedures';
 import { t } from './trpc';
@@ -10,18 +7,19 @@ import {
   getTransactionsByMonthYear,
   saveTransaction,
 } from '../services/transaction-service';
+import { CardTransactionFormSchema } from '@/types/form';
 
 const transactionRouter = t.router({
   getByMonthYear: protectedProcedure
     .input(z.object({ month: z.number(), year: z.number() }))
-    .output(CardTransactionRecordSchema)
+    .output(z.array(CardTransactionSchema))
     .query(async ({ ctx, input }) =>
       getTransactionsByMonthYear(ctx.user, input.month, input.year)
     ),
 
   getByPagination: protectedProcedure
     .input(z.object({ cursor: z.number() }))
-    .output(CardTransactionRecordSchema.optional())
+    .output(z.array(CardTransactionSchema).optional())
     .query(async ({ ctx, input }) =>
       getPaginatedTransactions(ctx.user, input.cursor)
     ),

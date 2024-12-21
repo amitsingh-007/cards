@@ -11,7 +11,6 @@ export const CardBrandEnum = z.enum([
   'niyo',
   'onecard',
 ]);
-
 export type TCardBrand = z.infer<typeof CardBrandEnum>;
 
 export const CardDataSchema = z.object({
@@ -20,30 +19,14 @@ export const CardDataSchema = z.object({
   cardLastDigits: z.number(),
   cardBillingDate: z.number(),
 });
-
 export type TCardData = z.infer<typeof CardDataSchema>;
 
 export const CardDataRecordSchema = z.record(z.string(), CardDataSchema);
 
-export const CardTransactionFormSchema = z.object({
-  cardId: z.string(),
-  amount: z.number(),
-  date: z.number(),
-});
-
-export type TCardTransactionForm = z.infer<typeof CardTransactionFormSchema>;
-
 export const CardTransactionSchema = z.object({
-  __shortKey: z.string(),
-  __fullKey: z.string(),
+  id: z.string(),
   cardId: z.string(),
   amount: z.number(),
   date: z.number(),
 });
-
 export type TCardTransaction = z.infer<typeof CardTransactionSchema>;
-
-export const CardTransactionRecordSchema = z.record(
-  z.string(),
-  CardTransactionSchema
-);
