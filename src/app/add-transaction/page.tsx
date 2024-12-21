@@ -62,12 +62,12 @@ const AddTransaction = () => {
     const { date, ...rest } = values;
     saveCardTransaction({ ...rest, date: date.getTime() })
       .then(() => {
-        toast('Transaction added successfully');
+        toast.success('Transaction added successfully');
         router.push('/');
       })
       .catch((error) => {
         if (error.name === 'TRPCClientError') {
-          toast(error.message);
+          toast.error(error.message);
         }
       });
   };

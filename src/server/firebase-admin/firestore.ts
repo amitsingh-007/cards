@@ -1,12 +1,16 @@
 import { UserRecord } from 'firebase-admin/auth';
 import { firebaseAdmin } from '.';
 import { getFirestore, Query } from 'firebase-admin/firestore';
-import { COLLECTION, TFetch1, CollectionSchema } from '@/types/database';
-import { z } from 'zod';
+import {
+  COLLECTION,
+  TQuery,
+  CollectionSchema,
+  QuerySchema,
+} from '@/types/database';
 
 const firestore = getFirestore(firebaseAdmin);
 
-export const fetch = async <T extends COLLECTION>({
+const getQuery = <T extends COLLECTION>({
   user,
   collection,
   conditions,
@@ -14,37 +18,49 @@ export const fetch = async <T extends COLLECTION>({
   orderDir = 'asc',
   startAfter,
   limit,
-}: TFetch1<T>): Promise<z.infer<(typeof CollectionSchema)[T]>[]> => {
-  let ref: Query = firestore
+}: TQuery<T>): Query => {
+  let query: Query = firestore
     .collection('users')
     .doc(user.uid)
     .collection(collection);
 
   if (conditions) {
     conditions.forEach(({ fieldPath, opStr, value }) => {
-      ref = ref.where(fieldPath, opStr, value);
+      query = query.where(fieldPath, opStr, value);
     });
   }
   if (orderBy) {
-    ref = ref.orderBy(orderBy, orderDir);
+    query = query.orderBy(orderBy, orderDir);
   }
   if (startAfter) {
-    ref = ref.startAfter(startAfter);
+    query = query.startAfter(startAfter);
   }
   if (limit && limit > 0) {
-    ref = ref.limit(limit);
+    query = query.limit(limit);
   }
 
-  const result = await ref.get();
-  const Schema = CollectionSchema[collection];
+  return query;
+};
+
+export const fetch = async <T extends COLLECTION>(
+  args: TQuery<T>
+): Promise<QuerySchema<T>[]> => {
+  const result = await getQuery(args).get();
+  const Schema = CollectionSchema[args.collection];
   return result.docs.map((doc) => Schema.parse(doc.data()));
+};
+
+export const fetchExists = async <T extends COLLECTION>(
+  args: TQuery<T>
+): Promise<boolean> => {
+  const result = await getQuery(args).count().get();
+  return result.data().count > 0;
 };
 
 export const addToCollection = async <T extends COLLECTION>(
   user: UserRecord,
   collection: T,
-  // TODO: create utility
-  data: Omit<z.infer<(typeof CollectionSchema)[T]>, 'id'>
+  data: Omit<QuerySchema<T>, 'id'>
 ) => {
   const docRef = firestore
     .collection('users')

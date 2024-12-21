@@ -2,7 +2,11 @@ import { COLLECTION, TCondition } from '@/types/database';
 import { TCardTransactionForm } from '@/types/form';
 import { TRPCError } from '@trpc/server';
 import { UserRecord } from 'firebase-admin/auth';
-import { addToCollection, fetch } from '../firebase-admin/firestore';
+import {
+  addToCollection,
+  fetch,
+  fetchExists,
+} from '../firebase-admin/firestore';
 
 const monthFilter = (
   month: number,
@@ -62,8 +66,7 @@ export const saveTransaction = async (
 ) => {
   const date = new Date(transaction.date);
 
-  // TODO: use exists
-  const sameMonthTransaction = await fetch({
+  const sameMonthTxnExists = await fetchExists({
     user,
     collection: COLLECTION.TRANSACTIONS,
     conditions: [
@@ -72,7 +75,7 @@ export const saveTransaction = async (
     ],
     limit: 1,
   });
-  if (sameMonthTransaction.length > 0) {
+  if (sameMonthTxnExists) {
     throw new TRPCError({
       code: 'BAD_REQUEST',
       message: 'Transaction already exists for this month',
