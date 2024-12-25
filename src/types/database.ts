@@ -25,7 +25,7 @@ export type TCondition<T extends COLLECTION> = {
 
 export type TQuery<T extends COLLECTION> = {
   collection: T;
-  user: UserRecord;
+  userId: string;
   conditions?: Array<TCondition<T>>;
   orderBy?: Extract<keyof QuerySchema<T>, string>;
   orderDir?: OrderByDirection;

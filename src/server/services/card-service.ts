@@ -4,7 +4,7 @@ import { addToCollection, fetch } from '../firebase-admin/firestore';
 import { TCardForm } from '@/types/form';
 
 export const getAllCards = async (user: UserRecord) => {
-  return fetch({ user, collection: COLLECTION.CARDS });
+  return fetch({ userId: user.uid, collection: COLLECTION.CARDS });
 };
 
 export const addCard = async (user: UserRecord, data: TCardForm) => {

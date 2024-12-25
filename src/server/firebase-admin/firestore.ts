@@ -1,6 +1,6 @@
 import { UserRecord } from 'firebase-admin/auth';
 import { firebaseAdmin } from '.';
-import { getFirestore, Query } from 'firebase-admin/firestore';
+import { AggregateField, getFirestore, Query } from 'firebase-admin/firestore';
 import {
   COLLECTION,
   TQuery,
@@ -11,7 +11,7 @@ import {
 const firestore = getFirestore(firebaseAdmin);
 
 const getQuery = <T extends COLLECTION>({
-  user,
+  userId,
   collection,
   conditions,
   orderBy,
@@ -21,7 +21,7 @@ const getQuery = <T extends COLLECTION>({
 }: TQuery<T>): Query => {
   let query: Query = firestore
     .collection('users')
-    .doc(user.uid)
+    .doc(userId)
     .collection(collection);
 
   if (conditions) {
@@ -55,6 +55,17 @@ export const fetchExists = async <T extends COLLECTION>(
 ): Promise<boolean> => {
   const result = await getQuery(args).count().get();
   return result.data().count > 0;
+};
+
+export const aggregateSum = async <T extends COLLECTION>(
+  args: TQuery<T>
+): Promise<number> => {
+  const result = await getQuery(args)
+    .aggregate({
+      sum: AggregateField.sum('amount'),
+    })
+    .get();
+  return result.data().sum;
 };
 
 export const addToCollection = async <T extends COLLECTION>(
