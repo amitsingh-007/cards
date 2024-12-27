@@ -27,12 +27,13 @@ import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { getCardBrand } from './add-card/constants';
-import { MONTHS, YEARS } from './constants';
+import { MONTHS } from './constants';
 import { useUser } from './contexts/user-context';
 import { getFormattedPrice, getMergedCardsData } from './utils';
 import BillingDate from '@/components/common/billing-date';
 import { trpc } from '@/trpc-client/api';
 import { Skeleton } from '@/components/ui/skeleton';
+import SelectYear from '@/components/common/select-year';
 
 const JANUARY = MONTHS[0];
 const DECEMBER = MONTHS[11];
@@ -104,22 +105,11 @@ const DahsboardTable = () => {
             ))}
           </SelectContent>
         </Select>
-        <Select
-          value={selectedYear.toString()}
-          onValueChange={(newYear) => setSelectedYear(Number(newYear))}
-          disabled={isInitialLoading}
-        >
-          <SelectTrigger className="w-[140px]">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {YEARS.map((year) => (
-              <SelectItem key={year} value={year.toString()}>
-                {year}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <SelectYear
+          selectedYear={selectedYear}
+          setSelectedYear={setSelectedYear}
+          isDisabled={isInitialLoading}
+        />
       </div>
       <div className="rounded-md border mt-4">
         <Table>

@@ -3,6 +3,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import DashboardHistory from './dashboard-history';
 import DahsboardTable from './dashboard-table';
+import DashboardGraph from './dahsboard-graph';
 
 export default function Home() {
   return (
@@ -17,12 +18,16 @@ export default function Home() {
         <TabsList className="mx-auto">
           <TabsTrigger value="dashboard-table">Dashboard</TabsTrigger>
           <TabsTrigger value="dashboard-history">Historical View</TabsTrigger>
+          <TabsTrigger value="dashboard-graph">Graphical View</TabsTrigger>
         </TabsList>
         <TabsContent value="dashboard-table" className="w-full">
           <DahsboardTable />
         </TabsContent>
         <TabsContent value="dashboard-history" className="w-full">
           <DashboardHistory />
+        </TabsContent>
+        <TabsContent value="dashboard-graph" className="w-full">
+          <DashboardGraph />
         </TabsContent>
       </Tabs>
     </>

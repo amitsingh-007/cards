@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { protectedProcedure } from './procedures';
 import { t } from './trpc';
 import {
+  getAnnualSummary,
   getPaginatedTransactions,
   getTransactionsByMonthYear,
   saveTransaction,
@@ -23,6 +24,11 @@ const transactionRouter = t.router({
     .query(async ({ ctx, input }) =>
       getPaginatedTransactions(ctx.user, input.cursor)
     ),
+
+  getAnnualSummary: protectedProcedure
+    .input(z.object({ year: z.number() }))
+    .output(z.array(z.object({ month: z.string(), sum: z.number() })))
+    .query(async ({ ctx, input }) => getAnnualSummary(ctx.user, input.year)),
 
   add: protectedProcedure
     .input(CardTransactionFormSchema)

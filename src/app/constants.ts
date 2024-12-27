@@ -12,10 +12,3 @@ export const MONTHS = [
   { label: 'November', value: 10 },
   { label: 'December', value: 11 },
 ] as const;
-
-const currentYear = new Date().getFullYear();
-const startingYear = 2024;
-export const YEARS = Array.from(
-  { length: currentYear - startingYear + 1 },
-  (_, i) => currentYear - i
-);

@@ -4,9 +4,17 @@ import { TRPCError } from '@trpc/server';
 import { UserRecord } from 'firebase-admin/auth';
 import {
   addToCollection,
+  aggregateSum,
   fetch,
   fetchExists,
 } from '../firebase-admin/firestore';
+import { MONTHS } from '@/app/constants';
+import {
+  unstable_cacheLife as cacheLife,
+  unstable_cacheTag as cacheTag,
+  revalidateTag,
+} from 'next/cache';
+import { getMontlySumCacheKey } from '../utils/cache';
 
 const monthFilter = (
   month: number,
@@ -40,7 +48,7 @@ export const getTransactionsByMonthYear = async (
   year: number
 ) => {
   return fetch({
-    user,
+    userId: user.uid,
     collection: COLLECTION.TRANSACTIONS,
     conditions: monthFilter(month, year),
   });
@@ -51,13 +59,37 @@ export const getPaginatedTransactions = async (
   cursor: number
 ) => {
   return fetch({
-    user,
+    userId: user.uid,
     collection: COLLECTION.TRANSACTIONS,
     orderBy: 'date',
     orderDir: 'desc',
     startAfter: cursor,
     limit: 5,
   });
+};
+
+const getMonthTotalSumCache = async (
+  userId: string,
+  month: number,
+  year: number
+) => {
+  'use cache';
+  cacheTag(getMontlySumCacheKey(userId, month, year));
+  cacheLife('max');
+
+  return await aggregateSum({
+    userId,
+    collection: COLLECTION.TRANSACTIONS,
+    conditions: monthFilter(month, year),
+  });
+};
+
+export const getAnnualSummary = async (user: UserRecord, year: number) => {
+  const promises = MONTHS.map(async (month) => {
+    const sum = await getMonthTotalSumCache(user.uid, month.value, year);
+    return { month: month.label, sum };
+  });
+  return await Promise.all(promises);
 };
 
 export const saveTransaction = async (
@@ -67,7 +99,7 @@ export const saveTransaction = async (
   const date = new Date(transaction.date);
 
   const sameMonthTxnExists = await fetchExists({
-    user,
+    userId: user.uid,
     collection: COLLECTION.TRANSACTIONS,
     conditions: [
       ...monthFilter(date.getMonth(), date.getFullYear()),
@@ -83,4 +115,8 @@ export const saveTransaction = async (
   }
 
   await addToCollection(user, COLLECTION.TRANSACTIONS, transaction);
+
+  revalidateTag(
+    getMontlySumCacheKey(user.uid, date.getMonth(), date.getFullYear())
+  );
 };
