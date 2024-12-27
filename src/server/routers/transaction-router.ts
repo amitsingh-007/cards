@@ -27,7 +27,7 @@ const transactionRouter = t.router({
 
   getAnnualSummary: protectedProcedure
     .input(z.object({ year: z.number() }))
-    .output(z.array(z.number()))
+    .output(z.array(z.object({ month: z.string(), sum: z.number() })))
     .query(async ({ ctx, input }) => getAnnualSummary(ctx.user, input.year)),
 
   add: protectedProcedure

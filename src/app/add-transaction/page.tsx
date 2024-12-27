@@ -54,9 +54,16 @@ const AddTransaction = () => {
     },
   });
 
+  const trpcUtils = trpc.useUtils();
   const { data: cards } = trpc.card.getAll.useQuery();
   const { mutateAsync: saveCardTransaction, isLoading } =
-    trpc.transaction.add.useMutation();
+    trpc.transaction.add.useMutation({
+      onSuccess: async (_, payload) => {
+        const date = new Date(payload.date);
+        const year = date.getFullYear();
+        await trpcUtils.transaction.getAnnualSummary.invalidate({ year });
+      },
+    });
 
   const onSubmit = (values: TFormType) => {
     const { date, ...rest } = values;

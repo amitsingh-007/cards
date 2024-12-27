@@ -85,12 +85,11 @@ const getMonthTotalSumCache = async (
 };
 
 export const getAnnualSummary = async (user: UserRecord, year: number) => {
-  const summary: number[] = [];
-  for (const month of MONTHS) {
-    const monthlySum = await getMonthTotalSumCache(user.uid, month.value, year);
-    summary.push(monthlySum);
-  }
-  return summary;
+  const promises = MONTHS.map(async (month) => {
+    const sum = await getMonthTotalSumCache(user.uid, month.value, year);
+    return { month: month.label, sum };
+  });
+  return await Promise.all(promises);
 };
 
 export const saveTransaction = async (
