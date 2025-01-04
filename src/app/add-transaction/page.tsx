@@ -54,34 +54,41 @@ const AddTransaction = () => {
     },
   });
 
-  const { data: cardData } = trpc.card.getAll.useQuery();
+  const trpcUtils = trpc.useUtils();
+  const { data: cards } = trpc.card.getAll.useQuery();
   const { mutateAsync: saveCardTransaction, isLoading } =
-    trpc.transaction.add.useMutation();
+    trpc.transaction.add.useMutation({
+      onSuccess: async (_, payload) => {
+        const date = new Date(payload.date);
+        const year = date.getFullYear();
+        await trpcUtils.transaction.getAnnualSummary.invalidate({ year });
+      },
+    });
 
   const onSubmit = (values: TFormType) => {
     const { date, ...rest } = values;
     saveCardTransaction({ ...rest, date: date.getTime() })
       .then(() => {
-        toast('Transaction added successfully');
+        toast.success('Transaction added successfully');
         router.push('/');
       })
       .catch((error) => {
         if (error.name === 'TRPCClientError') {
-          toast(error.message);
+          toast.error(error.message);
         }
       });
   };
 
   const cardOptions = useMemo(() => {
-    if (!cardData) {
+    if (!cards) {
       return [];
     }
-    return Object.entries(cardData).map(([cardId, card]) => ({
-      id: cardId,
+    return cards.map((card) => ({
+      id: card.id,
       name: card.cardName,
       cardBrand: getCardBrand(card.cardBrand),
     }));
-  }, [cardData]);
+  }, [cards]);
 
   return (
     <>

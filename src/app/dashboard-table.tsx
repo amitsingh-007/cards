@@ -23,17 +23,20 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { MoreHorizontal } from 'lucide-react';
+import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { getCardBrand } from './add-card/constants';
-import { MONTHS, YEARS } from './constants';
+import { MONTHS } from './constants';
 import { useUser } from './contexts/user-context';
 import { getFormattedPrice, getMergedCardsData } from './utils';
 import BillingDate from '@/components/common/billing-date';
 import { trpc } from '@/trpc-client/api';
 import { Skeleton } from '@/components/ui/skeleton';
+import SelectYear from '@/components/common/select-year';
 
+const JANUARY = MONTHS[0];
+const DECEMBER = MONTHS[11];
 const currentMonth = new Date().getMonth();
 const currentYear = new Date().getFullYear();
 
@@ -51,6 +54,14 @@ const DahsboardTable = () => {
       { enabled: !!user, refetchOnMount: true }
     );
 
+  const handlePrevMonthClick = () => {
+    setSelectedMonth((prevMonth) => Math.max(prevMonth - 1, JANUARY.value));
+  };
+
+  const handleNextMonthClick = () => {
+    setSelectedMonth((prevMonth) => Math.min(prevMonth + 1, DECEMBER.value));
+  };
+
   const { monthCardsData, total } = useMemo(
     () => getMergedCardsData(cardsData, cardTransactions),
     [cardsData, cardTransactions]
@@ -60,6 +71,24 @@ const DahsboardTable = () => {
   return (
     <div className="sm:w-[1000px] mx-auto">
       <div className="flex justify-end items-center gap-4 mt-6">
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="icon"
+            disabled={selectedMonth === JANUARY.value}
+            onClick={handlePrevMonthClick}
+          >
+            <ChevronLeft />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            disabled={selectedMonth === DECEMBER.value}
+            onClick={handleNextMonthClick}
+          >
+            <ChevronRight />
+          </Button>
+        </div>
         <Select
           value={selectedMonth.toString()}
           onValueChange={(newMonth) => setSelectedMonth(Number(newMonth))}
@@ -76,22 +105,11 @@ const DahsboardTable = () => {
             ))}
           </SelectContent>
         </Select>
-        <Select
-          value={selectedYear.toString()}
-          onValueChange={(newYear) => setSelectedYear(Number(newYear))}
-          disabled={isInitialLoading}
-        >
-          <SelectTrigger className="w-[140px]">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {YEARS.map((year) => (
-              <SelectItem key={year} value={year.toString()}>
-                {year}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <SelectYear
+          selectedYear={selectedYear}
+          setSelectedYear={setSelectedYear}
+          isDisabled={isInitialLoading}
+        />
       </div>
       <div className="rounded-md border mt-4">
         <Table>
@@ -113,19 +131,19 @@ const DahsboardTable = () => {
             </TableBody>
           ) : (
             <TableBody>
-              {monthCardsData.map(({ cardId, cardDetails, transaction }) => {
-                const cardBrand = getCardBrand(cardDetails.cardBrand);
+              {monthCardsData.map(({ card, transaction }) => {
+                const cardBrand = getCardBrand(card.cardBrand);
 
                 return (
-                  <TableRow key={cardId}>
+                  <TableRow key={card.id}>
                     <TableCell className="font-medium">
                       <CardName
                         cardBrandId={cardBrand?.id}
-                        cardName={cardDetails.cardName}
+                        cardName={card.cardName}
                       />
                     </TableCell>
                     <TableCell>
-                      <BillingDate billingDate={cardDetails.cardBillingDate} />
+                      <BillingDate billingDate={card.cardBillingDate} />
                     </TableCell>
                     <TableCell>
                       {getFormattedPrice(transaction?.amount)}
@@ -141,7 +159,7 @@ const DahsboardTable = () => {
                           <DropdownMenuItem
                             disabled={!!transaction}
                             onClick={() => {
-                              router.push(`/add-transaction?cardId=${cardId}`);
+                              router.push(`/add-transaction?cardId=${card.id}`);
                             }}
                           >
                             Record transaction
