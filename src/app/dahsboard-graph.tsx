@@ -16,13 +16,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import SelectYear from '@/components/common/select-year';
 
 const chartConfig: ChartConfig = {
@@ -38,7 +31,7 @@ const currentYear = now.getFullYear();
 const DashboardGraph = () => {
   const [selectedYear, setSelectedYear] = useState(currentYear);
 
-  const { data: annualSummary = [], isInitialLoading } =
+  const { data: annualSummary = [] } =
     trpc.transaction.getAnnualSummary.useQuery({ year: selectedYear });
 
   return (
@@ -53,15 +46,18 @@ const DashboardGraph = () => {
         <SelectYear
           selectedYear={selectedYear}
           setSelectedYear={setSelectedYear}
-          isDisabled={isInitialLoading}
         />
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         <ChartContainer
           config={chartConfig}
-          className="min-h-[460px] max-h-[460px] w-full"
+          className="aspect-auto h-[460px] w-full"
         >
-          <BarChart accessibilityLayer data={annualSummary}>
+          <BarChart
+            accessibilityLayer
+            data={annualSummary}
+            margin={{ top: 24 }}
+          >
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="month"
