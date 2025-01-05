@@ -92,7 +92,6 @@ const DahsboardTable = () => {
         <Select
           value={selectedMonth.toString()}
           onValueChange={(newMonth) => setSelectedMonth(Number(newMonth))}
-          disabled={isInitialLoading}
         >
           <SelectTrigger className="w-[160px]">
             <SelectValue />
@@ -108,7 +107,6 @@ const DahsboardTable = () => {
         <SelectYear
           selectedYear={selectedYear}
           setSelectedYear={setSelectedYear}
-          isDisabled={isInitialLoading}
         />
       </div>
       <div className="rounded-md border mt-4">

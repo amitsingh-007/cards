@@ -9,7 +9,6 @@ import {
 interface Props {
   selectedYear: number;
   setSelectedYear: (year: number) => void;
-  isDisabled: boolean;
 }
 
 const currentYear = new Date().getFullYear();
@@ -19,12 +18,11 @@ export const YEARS = Array.from(
   (_, i) => currentYear - i
 );
 
-const SelectYear = ({ selectedYear, setSelectedYear, isDisabled }: Props) => {
+const SelectYear = ({ selectedYear, setSelectedYear }: Props) => {
   return (
     <Select
       value={selectedYear.toString()}
       onValueChange={(newYear) => setSelectedYear(Number(newYear))}
-      disabled={isDisabled}
     >
       <SelectTrigger className="w-[140px]">
         <SelectValue />
