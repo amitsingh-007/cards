@@ -137,7 +137,14 @@ const DahsboardTable = () => {
                     <TableCell className="font-medium">
                       <CardName
                         cardBrandId={cardBrand?.id}
-                        cardName={card.cardName}
+                        cardName={
+                          <span>
+                            {card.cardName}
+                            <span className="ml-1 hidden md:inline">
+                              ({card.cardLastDigits})
+                            </span>
+                          </span>
+                        }
                       />
                     </TableCell>
                     <TableCell>

@@ -1,9 +1,10 @@
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import clsx from 'clsx';
+import { ReactNode } from 'react';
 
 interface Props {
   cardBrandId: string | undefined;
-  cardName: string;
+  cardName: ReactNode;
   className?: string;
 }
 
