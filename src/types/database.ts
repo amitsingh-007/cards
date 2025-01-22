@@ -1,4 +1,3 @@
-import { UserRecord } from 'firebase-admin/auth';
 import { OrderByDirection, WhereFilterOp } from 'firebase-admin/firestore';
 import { CardSchema, CardTransactionSchema } from './firestore';
 import { z } from 'zod';
