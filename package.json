@@ -58,7 +58,7 @@
     "eslint-config-flat-gitignore": "0.3.0",
     "eslint-config-next": "15.2.4",
     "eslint-config-prettier": "9.1.0",
-    "eslint-plugin-prettier": "5.2.3",
+    "eslint-plugin-prettier": "5.2.6",
     "eslint-plugin-react": "7.37.4",
     "eslint-plugin-react-hooks": "5.2.0",
     "eslint-plugin-unicorn": "56.0.1",
