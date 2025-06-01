@@ -67,6 +67,6 @@
     "tailwindcss": "3.4.17",
     "typescript": "5.8.3",
     "typescript-eslint": "8.33.0",
-    "vercel": "39.4.2"
+    "vercel": "42.3.0"
   }
 }
